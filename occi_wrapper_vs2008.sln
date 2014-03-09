@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test", "test\test_vs2008.vcproj", "{D47749C9-42BE-44C2-9CCD-CBF904A331C9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{98628A4E-F8C6-4870-A359-0B3EF36CA2EF} = {98628A4E-F8C6-4870-A359-0B3EF36CA2EF}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OcciWrapper", "occi_wrapper_vs2008.vcproj", "{98628A4E-F8C6-4870-A359-0B3EF36CA2EF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D47749C9-42BE-44C2-9CCD-CBF904A331C9}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D47749C9-42BE-44C2-9CCD-CBF904A331C9}.Debug|Win32.Build.0 = Debug|Win32
+		{D47749C9-42BE-44C2-9CCD-CBF904A331C9}.Release|Win32.ActiveCfg = Release|Win32
+		{D47749C9-42BE-44C2-9CCD-CBF904A331C9}.Release|Win32.Build.0 = Release|Win32
+		{98628A4E-F8C6-4870-A359-0B3EF36CA2EF}.Debug|Win32.ActiveCfg = Debug|Win32
+		{98628A4E-F8C6-4870-A359-0B3EF36CA2EF}.Debug|Win32.Build.0 = Debug|Win32
+		{98628A4E-F8C6-4870-A359-0B3EF36CA2EF}.Release|Win32.ActiveCfg = Release|Win32
+		{98628A4E-F8C6-4870-A359-0B3EF36CA2EF}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OcciWrapper", "occiwrapper_vs2010.vcxproj", "{14070C31-84FB-4DE7-8DBE-1EDDDCA04068}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test", "test\test_vs2010.vcxproj", "{56C223D8-2DD9-4942-8844-88A44CABC547}"
+	ProjectSection(ProjectDependencies) = postProject
+		{14070C31-84FB-4DE7-8DBE-1EDDDCA04068} = {14070C31-84FB-4DE7-8DBE-1EDDDCA04068}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{14070C31-84FB-4DE7-8DBE-1EDDDCA04068}.Debug|Win32.ActiveCfg = Debug|Win32
+		{14070C31-84FB-4DE7-8DBE-1EDDDCA04068}.Debug|Win32.Build.0 = Debug|Win32
+		{14070C31-84FB-4DE7-8DBE-1EDDDCA04068}.Release|Win32.ActiveCfg = Release|Win32
+		{14070C31-84FB-4DE7-8DBE-1EDDDCA04068}.Release|Win32.Build.0 = Release|Win32
+		{56C223D8-2DD9-4942-8844-88A44CABC547}.Debug|Win32.ActiveCfg = Debug|Win32
+		{56C223D8-2DD9-4942-8844-88A44CABC547}.Debug|Win32.Build.0 = Debug|Win32
+		{56C223D8-2DD9-4942-8844-88A44CABC547}.Release|Win32.ActiveCfg = Release|Win32
+		{56C223D8-2DD9-4942-8844-88A44CABC547}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
