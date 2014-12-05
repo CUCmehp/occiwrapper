@@ -40,13 +40,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)bin_vs2010</OutDir>
+    <OutDir>$(SolutionDir)bin_vs2010\</OutDir>
     <IntDir>$(Configuration)</IntDir>
     <TargetName>$(ProjectName)d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)bin_vs2010</OutDir>
+    <OutDir>$(SolutionDir)bin_vs2010\</OutDir>
     <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -56,7 +56,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;OCCI_WRAPPER_DLL_EXPORTS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>./include/occi_11g/occi</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./include/occi_11g/occi;$(SolutionDir)/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -75,7 +75,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;OCCI_WRAPPER_DLL_EXPORTS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>./include/occi_11g/occi</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./include/occi_11g/occi;$(SolutionDir)/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -88,28 +88,31 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="AbstractBinder.h" />
-    <ClInclude Include="AbstractBinding.h" />
-    <ClInclude Include="AbstractExtraction.h" />
-    <ClInclude Include="AbstractExtractor.h" />
-    <ClInclude Include="Binder.h" />
-    <ClInclude Include="Binding.h" />
     <ClInclude Include="Common.h" />
-    <ClInclude Include="Connection.h" />
-    <ClInclude Include="ConnectionInfo.h" />
-    <ClInclude Include="ConnectionPool.h" />
-    <ClInclude Include="Environment.h" />
-    <ClInclude Include="Exception.h" />
-    <ClInclude Include="Extraction.h" />
-    <ClInclude Include="Extractor.h" />
-    <ClInclude Include="Limit.h" />
+    <ClInclude Include="include\occiwrapper\AbstractBinder.h" />
+    <ClInclude Include="include\occiwrapper\AbstractBinding.h" />
+    <ClInclude Include="include\occiwrapper\AbstractExtraction.h" />
+    <ClInclude Include="include\occiwrapper\AbstractExtractor.h" />
+    <ClInclude Include="include\occiwrapper\Binder.h" />
+    <ClInclude Include="include\occiwrapper\Binding.h" />
+    <ClInclude Include="include\occiwrapper\Common.h" />
+    <ClInclude Include="include\occiwrapper\Connection.h" />
+    <ClInclude Include="include\occiwrapper\ConnectionInfo.h" />
+    <ClInclude Include="include\occiwrapper\ConnectionPool.h" />
+    <ClInclude Include="include\occiwrapper\Environment.h" />
+    <ClInclude Include="include\occiwrapper\Exception.h" />
+    <ClInclude Include="include\occiwrapper\Extraction.h" />
+    <ClInclude Include="include\occiwrapper\Extractor.h" />
+    <ClInclude Include="include\occiwrapper\Limit.h" />
+    <ClInclude Include="include\occiwrapper\OcciWrapper.h" />
+    <ClInclude Include="include\occiwrapper\Session.h" />
+    <ClInclude Include="include\occiwrapper\SessionFactory.h" />
+    <ClInclude Include="include\occiwrapper\Statement.h" />
+    <ClInclude Include="include\occiwrapper\StatementImpl.h" />
+    <ClInclude Include="include\occiwrapper\Type.h" />
+    <ClInclude Include="include\occiwrapper\TypeHandler.h" />
     <ClInclude Include="OcciWrapper.h" />
-    <ClInclude Include="Session.h" />
-    <ClInclude Include="SessionFactory.h" />
-    <ClInclude Include="Statement.h" />
-    <ClInclude Include="StatementImpl.h" />
     <ClInclude Include="Type.h" />
-    <ClInclude Include="TypeHandler.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AbstractBinder.cpp" />

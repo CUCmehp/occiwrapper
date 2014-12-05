@@ -1,4 +1,4 @@
-#include "AbstractExtraction.h"
+#include "OcciWrapper/AbstractExtraction.h"
 
 occiwrapper::AbstractExtraction::AbstractExtraction()
 {

@@ -1,5 +1,5 @@
-#include "Session.h"
-#include "StatementImpl.h"
+#include "OcciWrapper/Session.h"
+#include "OcciWrapper/StatementImpl.h"
 
 occiwrapper::Session::Session( shared_ptr< occiwrapper::Connection > pConnection, bool bAutoCommit )
 :m_bAutoCommit( bAutoCommit )
@@ -9,12 +9,20 @@ occiwrapper::Session::Session( shared_ptr< occiwrapper::Connection > pConnection
 
 shared_ptr< occiwrapper::StatementImpl > occiwrapper::Session::CreateStatementImpl()
 {
+	// TODO: check connection
+	if( m_pConnection == NULL || m_pConnection->GetValidity() == INVALID )
+	{
+		return shared_ptr< occiwrapper::StatementImpl >();
+	}
 	return shared_ptr< occiwrapper::StatementImpl >( new occiwrapper::StatementImpl( this->m_pConnection->CreateStatement( ), this->m_pConnection, this->m_bAutoCommit ) );
 }
 
 void occiwrapper::Session::Commit()
 {
-	this->m_pConnection->Commit();
+	if( m_pConnection != NULL )
+	{
+		this->m_pConnection->Commit();
+	}
 }
 
 void occiwrapper::Session::SetAutoCommit( bool bAutoCommit )
@@ -24,7 +32,10 @@ void occiwrapper::Session::SetAutoCommit( bool bAutoCommit )
 
 void occiwrapper::Session::Rollback()
 {
-	this->m_pConnection->Rollback();
+	if( m_pConnection != NULL )
+	{
+		this->m_pConnection->Rollback();
+	}
 }
 
 occiwrapper::Session::~Session()

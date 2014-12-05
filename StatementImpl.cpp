@@ -1,4 +1,4 @@
-#include "StatementImpl.h"
+#include "OcciWrapper/StatementImpl.h"
 
 occiwrapper::StatementImpl::StatementImpl( oracle::occi::Statement* pOcciStat, shared_ptr< occiwrapper::Connection >& pConn, bool bAutoCommit )
 :m_eState( occiwrapper::StatementImpl::ST_INITIALIZED )

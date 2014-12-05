@@ -1,6 +1,7 @@
-#include "Environment.h"
-#include "ConnectionInfo.h"
+#include "OcciWrapper/Environment.h"
+#include "OcciWrapper/ConnectionInfo.h"
 #include <assert.h>
+#include <iostream>
 
 /***
 *	@brief: this function test how to create Environment
@@ -9,4 +10,5 @@
 void TestEnviroment()
 {
 	assert( occiwrapper::Environment::CreateEnvironment() != NULL );
+	string strErrMsg = "";
 }

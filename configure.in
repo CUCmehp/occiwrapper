@@ -2,9 +2,10 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT(occiwrapper 1.0.0, CUCmehp@foxmail.com)
-AM_INIT_AUTOMAKE(occiwrapper, 1.0.0, CUCmehp@foxmail.com)
-AC_CONFIG_SRCDIR(OcciWrapper.h)
+#AC_INIT(occiwrapper, 1.0.0, CUCmehp@foxmail.com)
+AC_INIT(occiwrapper )
+AM_INIT_AUTOMAKE(occiwrapper, 5.7, CUCmehp@foxmail.com)
+AC_CONFIG_SRCDIR(include/OcciWrapper/OcciWrapper.h)
 
 # Checks for programs.
 AC_PROG_CXX

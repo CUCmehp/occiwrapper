@@ -1,5 +1,5 @@
-#include "ConnectionPool.h"
-#include "Common.h"
+#include "OcciWrapper/ConnectionPool.h"
+#include "OcciWrapper/Common.h"
 #include <iostream>
 
 occiwrapper::ConnectionPool::ConnectionPool()

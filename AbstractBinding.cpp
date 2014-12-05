@@ -1,4 +1,4 @@
-#include "AbstractBinding.h"
+#include "OcciWrapper/AbstractBinding.h"
 
 
 occiwrapper::AbstractBinding::AbstractBinding()

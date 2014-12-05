@@ -20,7 +20,6 @@
     <ClCompile Include="TestSessionFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Common.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="DbConfig.h" />
     <ClInclude Include="Test.h" />
@@ -59,11 +58,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)bin_vs2010</OutDir>
+    <OutDir>$(SolutionDir)bin_vs2010\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)bin_vs2010</OutDir>
+    <OutDir>$(SolutionDir)bin_vs2010\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -72,7 +71,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../include/occi_11g/occi;../</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../include/occi_11g/occi;$(SolutionDir)/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -90,7 +89,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../include/occi_11g/occi;../</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../include/occi_11g/occi;$(SolutionDir)/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

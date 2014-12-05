@@ -1,7 +1,7 @@
-#include "Environment.h"
-#include "Connection.h"
-#include "ConnectionInfo.h"
-#include "ConnectionPool.h"
+#include "OcciWrapper/Environment.h"
+#include "OcciWrapper/Connection.h"
+#include "OcciWrapper/ConnectionInfo.h"
+#include "OcciWrapper/ConnectionPool.h"
 #include <assert.h>
 #include "DbConfig.h"
 
@@ -15,7 +15,8 @@ void TestConnectionPool()
 	occiwrapper::ConnectionInfo info;
 	occiwrapper::ConnectionPool connPool;
 	test_db_config::DbConfig config;
-	assert( config.Init() );
+	bool bRet = config.Init();
+	assert( bRet == true );
 	info.ip = config.GetStrIp();
 	info.username = config.GetUserName();
 	info.password = config.GetPassword();

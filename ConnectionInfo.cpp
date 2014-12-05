@@ -1,4 +1,4 @@
-#include "ConnectionInfo.h"
+#include "OcciWrapper/ConnectionInfo.h"
 
 
 occiwrapper::ConnectionInfo::ConnectionInfo( const string& ip /*= "127.0.0.1"*/, const UInt32& port /*= 1521*/, const string& username /*= ""*/, const string& password /*= ""*/, const string& sid /*= "" */ )

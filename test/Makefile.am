@@ -10,5 +10,5 @@ AM_CPPFLAGS=-std=gnu++0x
 #AM_LDFLAGS=-locciwrapper
 #LDFLAGS=-L/u01/oracle/product/11.2.0/dbhome_1/lib
 LDFLAGS=-L$(top_srcdir) -locci -lclntsh -locciwrapper
-INCLUDES=-I$(top_srcdir) -I/u01/install/oracle_client/instantclient_12_1/sdk/include/
-test_LDFLAGS=-L/u01/install/oracle_client/instantclient_12_1/
+INCLUDES=-I$(top_srcdir) -I$(top_srcdir)/include -I/usr/local/instantclient_11_2/sdk/include/
+test_LDFLAGS=-L/usr/local/instantclient_11_2/

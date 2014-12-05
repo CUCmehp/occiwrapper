@@ -1,0 +1,9 @@
+1.版本1.0.0
+基础功能发布
+
+2.版本1.0.1
+(1).修改空Session执行内存AC异常。
+(2).修改TypeHander中retrieve struct tm类型时，小时处理的Bug。
+
+
+

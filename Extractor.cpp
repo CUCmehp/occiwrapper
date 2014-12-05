@@ -1,4 +1,4 @@
-#include "Extractor.h"
+#include "OcciWrapper/Extractor.h"
 
 occiwrapper::Extractor::Extractor( oracle::occi::Environment* pOcciEnv )
 	: m_pOcciResultSet( NULL )

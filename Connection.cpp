@@ -1,15 +1,10 @@
-#include "Connection.h"
-
+#include "OcciWrapper/Connection.h"
+#include <iostream>
+using namespace std;
 
 occiwrapper::Connection* occiwrapper::Connection::CreateConnection( shared_ptr< occiwrapper::Environment > pParmEnviroment, const ConnectionInfo& connInfo )
 {
-	Connection* p = new Connection( pParmEnviroment, connInfo );
-	if( p->m_eValidity == INVALID )
-	{
-		delete p;
-		return NULL;
-	}
-	return p;
+	return new Connection( pParmEnviroment, connInfo );
 }
 
 oracle::occi::Environment* occiwrapper::Connection::GetEnvirnment()
@@ -22,7 +17,7 @@ oracle::occi::Statement* occiwrapper::Connection::CreateStatement( const string 
 	try
 	{
 		oracle::occi::Statement* p = NULL;
-		if( this->m_pOcciConnection != NULL )
+		if( m_eValidity == VALID && m_pEnviroment->m_eValidity == VALID && m_pOcciConnection )
 		{
 			p = m_pOcciConnection->createStatement( strSql.c_str() );
 		}
@@ -45,9 +40,13 @@ bool occiwrapper::Connection::TerminateStatement( oracle::occi::Statement* pOcci
 {
 	try
 	{
-		if( pOcciStat != NULL )
+		if( m_eValidity == VALID && m_pEnviroment->m_eValidity == VALID && m_pOcciConnection )
 		{
-			this->m_pOcciConnection->terminateStatement( pOcciStat );
+			if( pOcciStat != NULL )
+			{
+				this->m_pOcciConnection->terminateStatement( pOcciStat );
+				return true;
+			}
 		}
 	}
 	catch ( oracle::occi::SQLException exc )
@@ -55,23 +54,25 @@ bool occiwrapper::Connection::TerminateStatement( oracle::occi::Statement* pOcci
 		stringstream ss;
 		ss << "terminate statement failed," << exc.what();
 		m_strErrMsg = ss.str();
-		return false;
 	}
 	catch( ... )
 	{
 		m_strErrMsg = "terminate statement failed, unknown exception.";
-		return false;
+		
 	}
-	return true;
+	return false;
+	
 }
 
 bool occiwrapper::Connection::Commit()
 {
 	try
 	{
-		string str = m_pOcciConnection->getClientCharSet();
-		this->m_pOcciConnection->commit();
-		return true;
+		if( m_eValidity == VALID && m_pEnviroment->m_eValidity == VALID && m_pOcciConnection )
+		{
+			this->m_pOcciConnection->commit();
+			return true;
+		}
 	}
 	catch ( oracle::occi::SQLException exc )
 	{
@@ -91,7 +92,10 @@ bool occiwrapper::Connection::Rollback()
 {
 	try
 	{
-		this->m_pOcciConnection->rollback();
+		if( m_eValidity == VALID && m_pEnviroment->m_eValidity == VALID && m_pOcciConnection )
+		{
+			this->m_pOcciConnection->rollback();
+		}
 		return true;
 	}
 	catch ( oracle::occi::SQLException exc )
@@ -116,7 +120,7 @@ occiwrapper::Connection::~Connection()
 		try
 		{
 			m_pEnviroment->m_pOcciEnviroment->terminateConnection( this->m_pOcciConnection );
-			this->m_eValidity = INVALID;
+			//this->m_eValidity = INVALID;
 			this->m_pOcciConnection = NULL;
 		}
 		catch (oracle::occi::SQLException exc)
@@ -154,25 +158,23 @@ occiwrapper::Connection::Connection( shared_ptr< occiwrapper::Environment >& pPa
 		try
 		{
 			m_pOcciConnection = m_pEnviroment->m_pOcciEnviroment->createConnection( m_objConnInfo.username, m_objConnInfo.password, ss.str() );
+			if( m_pOcciConnection )
+			{
+				this->m_eValidity = VALID;
+			}
 		}
 		catch( oracle::occi::SQLException exc )
 		{
 			stringstream ss;
 			ss << "connection database," << m_objConnInfo.GetHashString() << " failed," << exc.what();
 			m_strErrMsg = ss.str();
-			return;
 		}
 		catch( ... )
 		{
 			stringstream ss;
 			ss << "connection database," << m_objConnInfo.GetHashString() << " failed, unknown exception";
 			m_strErrMsg = ss.str();
-			return;
-		}
-
-		if( m_pOcciConnection )
-		{
-			this->m_eValidity = VALID;
 		}
 	}
 }
+

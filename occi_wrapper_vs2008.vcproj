@@ -236,79 +236,91 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\AbstractBinder.h"
+				RelativePath=".\include\OcciWrapper\AbstractBinder.h"
 				>
 			</File>
 			<File
-				RelativePath=".\AbstractBinding.h"
+				RelativePath=".\include\OcciWrapper\AbstractBinding.h"
 				>
 			</File>
 			<File
-				RelativePath=".\AbstractExtraction.h"
+				RelativePath=".\include\OcciWrapper\AbstractExtraction.h"
 				>
 			</File>
 			<File
-				RelativePath=".\AbstractExtractor.h"
+				RelativePath=".\include\OcciWrapper\AbstractExtractor.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Binder.h"
+				RelativePath=".\include\OcciWrapper\Binder.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Binding.h"
+				RelativePath=".\include\OcciWrapper\Binding.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Connection.h"
+				RelativePath=".\include\OcciWrapper\Common.h"
 				>
 			</File>
 			<File
-				RelativePath=".\ConnectionInfo.h"
+				RelativePath=".\include\OcciWrapper\Connection.h"
 				>
 			</File>
 			<File
-				RelativePath=".\ConnectionPool.h"
+				RelativePath=".\include\OcciWrapper\ConnectionInfo.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Environment.h"
+				RelativePath=".\include\OcciWrapper\ConnectionPool.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Exception.h"
+				RelativePath=".\include\OcciWrapper\Environment.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Extraction.h"
+				RelativePath=".\include\OcciWrapper\Exception.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Extractor.h"
+				RelativePath=".\include\OcciWrapper\Extraction.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Limit.h"
+				RelativePath=".\include\OcciWrapper\Extractor.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Session.h"
+				RelativePath=".\include\OcciWrapper\Limit.h"
 				>
 			</File>
 			<File
-				RelativePath=".\SessionFactory.h"
+				RelativePath=".\include\OcciWrapper\OcciWrapper.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Statement.h"
+				RelativePath=".\include\OcciWrapper\Session.h"
 				>
 			</File>
 			<File
-				RelativePath=".\StatementImpl.h"
+				RelativePath=".\include\OcciWrapper\SessionFactory.h"
 				>
 			</File>
 			<File
-				RelativePath=".\TypeHandler.h"
+				RelativePath=".\include\OcciWrapper\Statement.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\OcciWrapper\StatementImpl.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\OcciWrapper\Type.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\OcciWrapper\TypeHandler.h"
 				>
 			</File>
 		</Filter>

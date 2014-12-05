@@ -1,4 +1,4 @@
-#include "Binder.h"
+#include "OcciWrapper/Binder.h"
 
 occiwrapper::Binder::Binder( oracle::occi::Statement* pOcciStat, oracle::occi::Environment* pEnv )
 : m_pOcciStat( pOcciStat )

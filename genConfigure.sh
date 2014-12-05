@@ -34,10 +34,10 @@ function edit_makefile()
 {
         #edit Makefile.am
         sed -i '/^$/d' Makefile.am
-        sed -i '/INCLUDES/d' Makefile.am ; echo 'INCLUDES=-I$(top_srcdir)' -I$str_occi_include_path >> Makefile.am
+        sed -i '/INCLUDES/d' Makefile.am ; echo 'INCLUDES=-I$(top_srcdir) -I$(top_srcdir)/include' -I$str_occi_include_path >> Makefile.am
         #edit test/Makefile.am
         sed -i '/^$/d' test/Makefile.am
-        sed -i '/INCLUDES/d' test/Makefile.am ; echo 'INCLUDES=-I$(top_srcdir)' -I$str_occi_include_path >> test/Makefile.am
+        sed -i '/INCLUDES/d' test/Makefile.am ; echo 'INCLUDES=-I$(top_srcdir) -I$(top_srcdir)/include' -I$str_occi_include_path >> test/Makefile.am
         sed -i '/test_LDFLAGS/d' test/Makefile.am ; echo "test_LDFLAGS=-L$str_occi_lib_path" >> test/Makefile.am
 }
 

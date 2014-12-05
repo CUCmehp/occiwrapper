@@ -1,4 +1,4 @@
-#include "Limit.h"
+#include "OcciWrapper/Limit.h"
 
 occiwrapper::Limit::Limit( UInt32 nValue )
 	:m_nValue( nValue )

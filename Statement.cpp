@@ -1,28 +1,8 @@
-#include "Statement.h"
-#include "Session.h"
-
-//occiwrapper::Statement::~Statement()
-//{
-//
-//}
+#include "OcciWrapper/Statement.h"
+#include "OcciWrapper/Session.h"
 
 occiwrapper::Statement::Statement( Session& session )
 :_executed( false )
 {
-	this->pImp = session.CreateStatementImpl( );
+	this->m_pImp = session.CreateStatementImpl( );
 }
-
-
-//occiwrapper::Statement& occiwrapper::Statement::operator ,( occiwrapper::Manipulator manip ) /*Statement& operator , (AbstractBinding* info)*/
-
-
-
-//occiwrapper::Statement::Statement( shared_ptr< StatementImpl > pImp )
-//{
-//	this->pImp = pImp;
-//}
-
-//void occiwrapper::Manipulator::operator()( Statement& statement )
-//{
-//	statement.execute();
-//}

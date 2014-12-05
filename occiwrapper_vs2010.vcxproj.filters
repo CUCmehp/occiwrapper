@@ -27,61 +27,70 @@
     <ClInclude Include="Common.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="TypeHandler.h">
+    <ClInclude Include="include\occiwrapper\AbstractBinder.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="AbstractBinder.h">
+    <ClInclude Include="include\occiwrapper\AbstractBinding.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="AbstractBinding.h">
+    <ClInclude Include="include\occiwrapper\AbstractExtraction.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="AbstractExtraction.h">
+    <ClInclude Include="include\occiwrapper\AbstractExtractor.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="AbstractExtractor.h">
+    <ClInclude Include="include\occiwrapper\Binder.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Binder.h">
+    <ClInclude Include="include\occiwrapper\Binding.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Binding.h">
+    <ClInclude Include="include\occiwrapper\Common.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Connection.h">
+    <ClInclude Include="include\occiwrapper\Connection.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="ConnectionInfo.h">
+    <ClInclude Include="include\occiwrapper\ConnectionInfo.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="ConnectionPool.h">
+    <ClInclude Include="include\occiwrapper\ConnectionPool.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Environment.h">
+    <ClInclude Include="include\occiwrapper\Environment.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Exception.h">
+    <ClInclude Include="include\occiwrapper\Exception.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Extraction.h">
+    <ClInclude Include="include\occiwrapper\Extraction.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Extractor.h">
+    <ClInclude Include="include\occiwrapper\Extractor.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Limit.h">
+    <ClInclude Include="include\occiwrapper\Limit.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Session.h">
+    <ClInclude Include="include\occiwrapper\OcciWrapper.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="SessionFactory.h">
+    <ClInclude Include="include\occiwrapper\Session.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Statement.h">
+    <ClInclude Include="include\occiwrapper\SessionFactory.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="StatementImpl.h">
+    <ClInclude Include="include\occiwrapper\Statement.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\occiwrapper\StatementImpl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\occiwrapper\Type.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\occiwrapper\TypeHandler.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

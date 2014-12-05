@@ -1,4 +1,4 @@
-#include "SessionFactory.h"
+#include "OcciWrapper/SessionFactory.h"
 
 occiwrapper::SessionFactory::SessionFactory()
 {

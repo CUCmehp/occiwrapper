@@ -1,6 +1,6 @@
-#include "Environment.h"
-#include "Connection.h"
-#include "ConnectionInfo.h"
+#include "OcciWrapper/Environment.h"
+#include "OcciWrapper/Connection.h"
+#include "OcciWrapper/ConnectionInfo.h"
 #include <assert.h>
 #include "DbConfig.h"
 
@@ -23,12 +23,16 @@ void TestCreateConnection()
 
 	occiwrapper::ConnectionInfo info;
 	test_db_config::DbConfig config;
-	assert( config.Init() );
+	bool bRet = config.Init();
+	assert( bRet );
 	info.ip = config.GetStrIp();
 	info.username = config.GetUserName();
 	info.password = config.GetPassword();
 	info.sid = config.GetSid();
-
-	shared_ptr< occiwrapper::Connection > pConn1( occiwrapper::Connection::CreateConnection( shared_ptr< occiwrapper::Environment >( pEnv ), info ) );
-	shared_ptr< occiwrapper::Connection > pConn2( occiwrapper::Connection::CreateConnection( shared_ptr< occiwrapper::Environment >( pEnv ), info ) );
+	{
+		shared_ptr< occiwrapper::Connection > pConn1( occiwrapper::Connection::CreateConnection( shared_ptr< occiwrapper::Environment >( pEnv ), info ) );
+	}
+	{
+		shared_ptr< occiwrapper::Connection > pConn2( occiwrapper::Connection::CreateConnection( shared_ptr< occiwrapper::Environment >( pEnv ), info ) );
+	}
 }

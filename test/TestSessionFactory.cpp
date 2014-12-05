@@ -1,4 +1,4 @@
-#include "OcciWrapper.h"
+#include "OcciWrapper/OcciWrapper.h"
 #include <time.h>
 #include "DbConfig.h"
 
@@ -7,11 +7,11 @@
 void TestDDL( )
 {
 	test_db_config::DbConfig config;
-	assert( config.Init() );
+	bool bRet = config.Init();
+	assert( bRet == true );
 	occiwrapper::ConnectionInfo info( config.GetStrIp(), 1521, config.GetUserName(), config.GetPassword(), config.GetSid() );
 	occiwrapper::SessionFactory sf;
 	occiwrapper::Session s = sf.Create( info );
-	bool bRet = false;
 	string strErrMsg = "";
 	s << "create table tbl_test( x int )", now, bRet, strErrMsg;
 	assert( bRet == true );
@@ -26,11 +26,11 @@ void TestDDL( )
 void TestSimpleInsert()
 {
 	test_db_config::DbConfig config;
-	assert( config.Init() );
+	bool bRet = config.Init();
+	assert( bRet == true );
 	occiwrapper::ConnectionInfo info( config.GetStrIp(), 1521, config.GetUserName(), config.GetPassword(), config.GetSid() );
 	occiwrapper::SessionFactory sf;
 	occiwrapper::Session s = sf.Create( info );
-	bool bRet = false;
 	string strErrMsg = "";
 	s << "truncate table tbl_test1", now, bRet, strErrMsg;
 	assert( bRet == true );
@@ -42,7 +42,8 @@ void TestSimpleInsert()
 void TestSimpleInsertTimes()
 {
 	test_db_config::DbConfig config;
-	assert( config.Init() );
+	bool bRet = config.Init();
+	assert( bRet == true );
 	occiwrapper::ConnectionInfo info( config.GetStrIp(), 1521, config.GetUserName(), config.GetPassword(), config.GetSid() );
 	occiwrapper::SessionFactory sf;
 	occiwrapper::Session s = sf.Create( info );
@@ -60,11 +61,11 @@ void TestSimpleInsertTimes()
 void TestSimpleBinding()
 {
 	test_db_config::DbConfig config;
-	assert( config.Init() );
+	bool bRet = config.Init();
+	assert( bRet == true );
 	occiwrapper::ConnectionInfo info( config.GetStrIp(), 1521, config.GetUserName(), config.GetPassword(), config.GetSid() );
 	occiwrapper::SessionFactory sf;
 	occiwrapper::Session s = sf.Create( info );
-	bool bRet;
 	string strErrMsg;
 	s << "truncate table tbl_test1", now;
 	s << "truncate table test_string", now;
@@ -83,11 +84,11 @@ void TestSimpleBinding()
 void TestSimpleBindingTimes()
 {
 	test_db_config::DbConfig config;
-	assert( config.Init() );
+	bool bRet = config.Init();
+	assert( bRet == true );
 	occiwrapper::ConnectionInfo info( config.GetStrIp(), 1521, config.GetUserName(), config.GetPassword(), config.GetSid() );
 	occiwrapper::SessionFactory sf;
 	occiwrapper::Session s = sf.Create( info );
-	bool bRet;
 	string strErrMsg;
 	s << "truncate table tbl_test1", now;
 	occiwrapper::Statement stmt = s << "insert into tbl_test1( x ) values( :1 )";
@@ -102,14 +103,14 @@ void TestSimpleBindingTimes()
 void TestRollbackAndCommit()
 {
 	test_db_config::DbConfig config;
-	assert( config.Init() );
+	bool bRet = config.Init();
+	assert( bRet == true );
 	occiwrapper::ConnectionInfo info( config.GetStrIp(), 1521, config.GetUserName(), config.GetPassword(), config.GetSid() );
 	occiwrapper::SessionFactory sf;
 	occiwrapper::Session s = sf.Create( info, false );
 	s << "truncate table tbl_test1", now;
 	s.Commit();
 
-	bool bRet = false;
 	string strErrMsg = "";
 	s << "insert into tbl_test1( x ) values ( 10005 )", now, bRet, strErrMsg;
 	s.Rollback();
@@ -128,28 +129,26 @@ void TestRollbackAndCommit()
 void TestBindOcciNumber()
 {
 	test_db_config::DbConfig config;
-	assert( config.Init() );
+	bool bRet = config.Init();
+	assert( bRet == true );
 	occiwrapper::ConnectionInfo info( config.GetStrIp(), 1521, config.GetUserName(), config.GetPassword(), config.GetSid() );
 	occiwrapper::SessionFactory sf;
 	occiwrapper::Session s = sf.Create( info );
-	bool result;
 	string strErrMsg;
-	
 	oracle::occi::Number number( 100.234 );
-
-	s << "insert into test_number( id, number_value ) values( :1, :2 )", use( 1 ), use( number ), now, result, strErrMsg;
-	assert( result );
+	s << "insert into test_number( id, number_value ) values( :1, :2 )", use( 1 ), use( number ), now, bRet, strErrMsg;
+	assert( bRet );
 }
 
 // test simple batched binding
 void TestSimpleBatchedBind()
 {
 	test_db_config::DbConfig config;
-	assert( config.Init() );
+	bool bRet = config.Init();
+	assert( bRet == true );
 	occiwrapper::ConnectionInfo info( config.GetStrIp(), 1521, config.GetUserName(), config.GetPassword(), config.GetSid() );
 	occiwrapper::SessionFactory sf;
 	occiwrapper::Session s = sf.Create( info );
-	bool bRet;
 	string strErrMsg;
 
 	s << "truncate table tbl_test1", now, bRet;
@@ -166,11 +165,11 @@ void TestSimpleBatchedBind()
 void TestBindTwoColumns()
 {
 	test_db_config::DbConfig config;
-	assert( config.Init() );
+	bool bRet = config.Init();
+	assert( bRet == true );
 	occiwrapper::ConnectionInfo info( config.GetStrIp(), 1521, config.GetUserName(), config.GetPassword(), config.GetSid() );
 	occiwrapper::SessionFactory sf;
 	occiwrapper::Session s = sf.Create( info );
-	bool bRet;
 	string strErrMsg;
 
 	int a[5] = { 20, 21, 22, 23, 24 };
@@ -198,11 +197,11 @@ void TestBindTwoColumns()
 void TestDate()
 {
 	test_db_config::DbConfig config;
-	assert( config.Init() );
+	bool bRet = config.Init();
+	assert( bRet == true );
 	occiwrapper::ConnectionInfo info( config.GetStrIp(), 1521, config.GetUserName(), config.GetPassword(), config.GetSid() );
 	occiwrapper::SessionFactory sf;
 	occiwrapper::Session s = sf.Create( info );
-	bool bRet;
 	string strErrMsg;
 
 	struct tm tmValue;
@@ -230,6 +229,11 @@ void TestDate()
 	s << "select date_val from test_date", into( vTmDb ), now, bRet, strErrMsg;
 	assert( bRet );
 	assert( vTmDb.size() == 10001 );
+	assert( vTmDb[ 0 ].tm_year == tmValue.tm_year );
+	assert( vTmDb[ 0 ].tm_mon == tmValue.tm_mon );
+	assert( vTmDb[ 0 ].tm_mday == tmValue.tm_mday );
+	assert( vTmDb[ 0 ].tm_hour == tmValue.tm_hour );
+	assert( vTmDb[ 0 ].tm_min == tmValue.tm_min );
 	assert( vTmDb[ 0 ].tm_sec == tmValue.tm_sec );
 }
 
@@ -237,11 +241,11 @@ void TestDate()
 void TestUpdate()
 {
 	test_db_config::DbConfig config;
-	assert( config.Init() );
+	bool bRet = config.Init();
+	assert( bRet == true );
 	occiwrapper::ConnectionInfo info( config.GetStrIp(), 1521, config.GetUserName(), config.GetPassword(), config.GetSid() );
 	occiwrapper::SessionFactory sf;
 	occiwrapper::Session s = sf.Create( info );
-	bool bRet = false;
 	string strErrMsg = "";
 	s << "truncate table tbl_test1", now, bRet, strErrMsg;
 	assert( bRet == true );
@@ -255,11 +259,11 @@ void TestUpdate()
 void TestBindTuple()
 {
 	test_db_config::DbConfig config;
-	assert( config.Init() );
+	bool bRet = config.Init();
+	assert( bRet == true );
 	occiwrapper::ConnectionInfo info( config.GetStrIp(), 1521, config.GetUserName(), config.GetPassword(), config.GetSid() );
 	occiwrapper::SessionFactory sf;
 	occiwrapper::Session s = sf.Create( info );
-	bool bRet;
 	string strErrMsg;
 	tuple< int, tuple< int > > a[5] = { make_tuple( 20, make_tuple( 30 ) ), make_tuple( 21, make_tuple( 31 ) ), make_tuple( 22, make_tuple( 32 ) ), make_tuple( 23, make_tuple( 33 ) ), make_tuple( 24, make_tuple( 34 ) ) };	
 	vector< tuple< int, tuple< int > > > vec( a, a + 5 );
@@ -273,11 +277,11 @@ void TestBindTuple()
 void TestProcedure()
 {
 	test_db_config::DbConfig config;
-	assert( config.Init() );
+	bool bRet = config.Init();
+	assert( bRet == true );
 	occiwrapper::ConnectionInfo info( config.GetStrIp(), 1521, config.GetUserName(), config.GetPassword(), config.GetSid() );
 	occiwrapper::SessionFactory sf;
 	occiwrapper::Session s = sf.Create( info );
-	bool bRet;
 	string strErrMsg;
 
 	int nParIn = 1000;
@@ -291,11 +295,11 @@ void TestProcedure()
 void TestFunction()
 {
 	test_db_config::DbConfig config;
-	assert( config.Init() );
+	bool bRet = config.Init();
+	assert( bRet == true );
 	occiwrapper::ConnectionInfo info( config.GetStrIp(), 1521, config.GetUserName(), config.GetPassword(), config.GetSid() );
 	occiwrapper::SessionFactory sf;
 	occiwrapper::Session s = sf.Create( info );
-	bool bRet;
 	string strErrMsg;
 
 	int a;
@@ -311,12 +315,11 @@ void TestFunction()
 void TestFunctionRetrieveAll()
 {
 	test_db_config::DbConfig config;
-	assert( config.Init() );
+	bool bRet = config.Init();
+	assert( bRet == true );
 	occiwrapper::ConnectionInfo info( config.GetStrIp(), 1521, config.GetUserName(), config.GetPassword(), config.GetSid() );
 	occiwrapper::SessionFactory sf;
 	occiwrapper::Session s = sf.Create( info );
-
-	bool bRet;
 	string strErrMsg;
 
 	int ret;
@@ -338,12 +341,11 @@ void TestFunctionRetrieveAll()
 void TestFunctionPassIntoAll()
 {
 	test_db_config::DbConfig config;
-	assert( config.Init() );
+	bool bRet = config.Init();
+	assert( bRet == true );
 	occiwrapper::ConnectionInfo info( config.GetStrIp(), 1521, config.GetUserName(), config.GetPassword(), config.GetSid() );
 	occiwrapper::SessionFactory sf;
 	occiwrapper::Session s = sf.Create( info );
-
-	bool bRet;
 	string strErrMsg;
 
 	int ret;
@@ -362,11 +364,11 @@ void TestFunctionPassIntoAll()
 void TestBatchedInsertAndSelect()
 {
 	test_db_config::DbConfig config;
-	assert( config.Init() );
+	bool bRet = config.Init();
+	assert( bRet == true );
 	occiwrapper::ConnectionInfo info( config.GetStrIp(), 1521, config.GetUserName(), config.GetPassword(), config.GetSid() );
 	occiwrapper::SessionFactory sf;
 	occiwrapper::Session s = sf.Create( info );
-	bool bRet;
 	string strErrMsg;
 	s << "truncate table test_batched_table", now, bRet, strErrMsg;
 	assert( bRet );
@@ -416,11 +418,11 @@ void TestBatchedInsertAndSelect()
 void TestSelectWithLimit()
 {
 	test_db_config::DbConfig config;
-	assert( config.Init() );
+	bool bRet = config.Init();
+	assert( bRet == true );
 	occiwrapper::ConnectionInfo info( config.GetStrIp(), 1521, config.GetUserName(), config.GetPassword(), config.GetSid() );
 	occiwrapper::SessionFactory sf;
 	occiwrapper::Session s = sf.Create( info );
-	bool bRet;
 	string strErrMsg;
 
 	tuple< int, tuple< int > > a[5] = { make_tuple( 20, make_tuple( 30 ) ), make_tuple( 21, make_tuple( 31 ) ), make_tuple( 22, make_tuple( 32 ) ), make_tuple( 23, make_tuple( 33 ) ), make_tuple( 24, make_tuple( 34 ) ) };
@@ -457,11 +459,11 @@ void TestSelectWithLimit()
 void TestSelectSingleStep()
 {
 	test_db_config::DbConfig config;
-	assert( config.Init() );
+	bool bRet = config.Init();
+	assert( bRet == true );
 	occiwrapper::ConnectionInfo info( config.GetStrIp(), 1521, config.GetUserName(), config.GetPassword(), config.GetSid() );
 	occiwrapper::SessionFactory sf;
 	occiwrapper::Session s = sf.Create( info );
-	bool bRet;
 	string strErrMsg;
 	tuple< int, tuple< int > > a[5] = { make_tuple( 20, make_tuple( 30 ) ), make_tuple( 21, make_tuple( 31 ) ), make_tuple( 22, make_tuple( 32 ) ), make_tuple( 23, make_tuple( 33 ) ), make_tuple( 24, make_tuple( 34 ) ) };
 	vector< tuple< int, tuple< int > > > vec( a, a + 5 );
@@ -506,11 +508,11 @@ void TestSelectSingleStep()
 void TestDifferentTypeSelect()
 {
 	test_db_config::DbConfig config;
-	assert( config.Init() );
+	bool bRet = config.Init();
+	assert( bRet == true );
 	occiwrapper::ConnectionInfo info( config.GetStrIp(), 1521, config.GetUserName(), config.GetPassword(), config.GetSid() );
 	occiwrapper::SessionFactory sf;
 	occiwrapper::Session s = sf.Create( info );
-	bool bRet;
 	string strErrMsg;
 
 	struct tm* pTm;
@@ -548,11 +550,11 @@ void TestDifferentTypeSelect()
 void TestEmptyValue()
 {
 	test_db_config::DbConfig config;
-	assert( config.Init() );
+	bool bRet = config.Init();
+	assert( bRet == true );
 	occiwrapper::ConnectionInfo info( config.GetStrIp(), 1521, config.GetUserName(), config.GetPassword(), config.GetSid() );
 	occiwrapper::SessionFactory sf;
 	occiwrapper::Session s = sf.Create( info );
-	bool bRet;
 	string strErrMsg;
 	s << "truncate table test_batched_table", now, bRet, strErrMsg;
 	assert( bRet );
@@ -583,11 +585,11 @@ void TestEmptyValue()
 void TestMillionDataProcess()
 {
 	test_db_config::DbConfig config;
-	assert( config.Init() );
+	bool bRet = config.Init();
+	assert( bRet == true );
 	occiwrapper::ConnectionInfo info( config.GetStrIp(), 1521, config.GetUserName(), config.GetPassword(), config.GetSid() );
 	occiwrapper::SessionFactory sf;
 	occiwrapper::Session s = sf.Create( info );
-	bool bRet;
 	string strErrMsg;
 	s << "truncate table test_batched_table", now, bRet, strErrMsg;
 	assert( bRet );

@@ -8,6 +8,8 @@
 
 using namespace std;
 
+#pragma warning( disable : 4800 )
+
 namespace common
 {
 	/**
