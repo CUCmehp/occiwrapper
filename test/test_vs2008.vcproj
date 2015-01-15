@@ -205,6 +205,10 @@
 				RelativePath=".\TestSessionFactory.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\TestTuple.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Í·ÎÄ¼þ"
@@ -237,6 +241,10 @@
 			</File>
 			<File
 				RelativePath=".\TestSessionFactory.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TestTuple.h"
 				>
 			</File>
 		</Filter>

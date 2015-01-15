@@ -131,6 +131,10 @@
     <ClCompile Include="Statement.cpp" />
     <ClCompile Include="StatementImpl.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="AUTHORS" />
+    <None Include="ChangeLog" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

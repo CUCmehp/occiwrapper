@@ -141,4 +141,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="AUTHORS">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="ChangeLog">
+      <Filter>资源文件</Filter>
+    </None>
+  </ItemGroup>
 </Project>

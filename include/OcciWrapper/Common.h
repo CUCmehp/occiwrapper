@@ -4,6 +4,7 @@
 #include "occiCommon.h"
 #include <string>
 #include <vector>
+#include <iterator>
 using namespace std;
 
 #if defined(WIN32)
@@ -38,7 +39,7 @@ using std::tr1::make_tuple;
 
 namespace occiwrapper
 {
-	const int nBatchedRetrieveOnceCount = 4;
+	const int nBatchedRetrieveOnceCount = 10000;
 
 	enum __OCCI_WRAPPER_API Validity { INVALID = 0, VALID = 1 };
 
@@ -92,6 +93,13 @@ namespace occiwrapper
 	*	@since: 2012-05-06
 	*/
 	__OCCI_WRAPPER_API size_t  GetVectorStringMaxLength( const vector< string >& vec );
+
+	/***
+	*	@brief: get container string max length
+	*	@add by: CUCmehp
+	*	@since: 2015-01-07
+	*/
+	__OCCI_WRAPPER_API size_t  GetListMaxStringLength( const list< string >& vList );
 
 	/***
 	*	@brief: convert struct tm_value to oracle type Date

@@ -2,7 +2,9 @@
 #include "TestConnectionPool.h"
 #include "TestEnviroment.h"
 #include "TestSessionFactory.h"
+#include "TestTuple.h"
 #include <iostream>
+#include <time.h>
 
 /***
 *	@brief: run all test function.
@@ -14,6 +16,11 @@
 int main( int argc, char* argv[] )
 {
 	std::cout << "start to run all test!" << std::endl;
+
+	// test select into single value
+	std::cout << "start to run TestSingleRowSelect:" << std::endl;
+	TestSingleRowSelect();
+	std::cout << "TestSingleRowSelect finish" << std::endl;
 
 	// test create oracle environment
 	std::cout << "start to run TestEnviroment:" << std::endl;
@@ -55,6 +62,11 @@ int main( int argc, char* argv[] )
 	TestSimpleBindingTimes();
 	std::cout << "TestSimpleBindingTimes finish" << std::endl;
 	
+	// test bind occi Number
+	std::cout << "start to run TestBindOcciNumber:" << std::endl;
+	TestBindOcciNumber();
+	std::cout << "TestBindOcciNumber finish" << std::endl;
+
 	// test simple batched bind
 	std::cout << "start to run TestSimpleBatchedBind:" << std::endl;
 	TestSimpleBatchedBind();
@@ -105,6 +117,11 @@ int main( int argc, char* argv[] )
 	TestFunctionPassIntoAll();
 	std::cout << "TestFunctionPassIntoAll finish" << std::endl;
 
+	// test select user tables
+	std::cout << "start to run TestUserTableSelect" << std::endl;
+	TestUserTableSelect();
+	std::cout << "TestUserTableSelect finish" << std::endl;
+
 	// test select into
 	std::cout << "start to run TestBatchedInsertAndSelect:" << std::endl;
 	TestBatchedInsertAndSelect();
@@ -130,10 +147,40 @@ int main( int argc, char* argv[] )
 	TestEmptyValue();
 	std::cout << "TestEmptyValue finish" << std::endl;
 
-	// test million data process
+	// test million data process with vector
 	std::cout << "start to run TestMillionDataProcess:" << std::endl;
+	time_t t1 = time( NULL );
 	TestMillionDataProcess();
-	std::cout << "TestMillionDataProcess finish" << std::endl;
+	time_t t2 = time( NULL );
+	std::cout << "TestMillionDataProcess finish, cost:" << ( t2 - t1 ) << " seconds" << std::endl;
+
+	// test million data process with list
+	std::cout << "start to run TestMillionDataProcessList:" << std::endl;
+	time_t t3 = time( NULL );
+	TestMillionDataProcessList();
+	time_t t4 = time( NULL );
+	std::cout << "TestMillionDataProcessList finish, cost:" << ( t4 - t3 ) << " seconds" << std::endl;
+
+	// test single tuple
+	std::cout << "start to run TestSingleTupleInsertAndSelect:" << std::endl;
+	TestSingleTupleInsertAndSelect();
+	std::cout << "TestSingleTupleInsertAndSelect finish" << std::endl;
+
+	std::cout << "start to run TestMultipleRecordForTuple:" << std::endl;
+	TestMultipleRecordForTuple();
+	std::cout << "TestMultipleRecordForTuple finish" << std::endl;
+
+	std::cout << "start to run TestTupleElement:" << std::endl;
+	TestTupleElement();
+	std::cout << "TestTupleElement finish" << std::endl;
+
+	std::cout << "start to run TestTupleVector:" << std::endl;
+	TestTupleVector();
+	std::cout << "TestTupleVector finish" << std::endl;
+
+	std::cout << "start to run TestTupleList:" << std::endl;
+	TestTupleList();
+	std::cout << "TestTupleList finish" << std::endl;
 
 	std::cout << "finish running all test!" << std::endl;
 	getchar();

@@ -4,6 +4,82 @@
 
 #pragma warning( disable : 4244 )
 
+void TestSingleRowSelect()
+{
+	test_db_config::DbConfig config;
+	bool bRet = config.Init();
+	assert( bRet == true );
+	occiwrapper::ConnectionInfo info( config.GetStrIp(), 1521, config.GetUserName(), config.GetPassword(), config.GetSid() );
+	occiwrapper::SessionFactory sf;
+	occiwrapper::Session s = sf.Create( info );
+	string strErrMsg = "";
+	string strProcedure = 
+	"declare \
+		v_count  number(8); \
+		v_sql    varchar2( 1024 ); \
+	begin \
+		select count( 1 ) into v_count from user_tables where table_name = 'TBL_TEST';   \
+		if v_count = 1 then \
+			v_sql := 'drop table tbl_test'; \
+			execute immediate v_sql; \
+		end if; \
+	exception \
+		when others then \
+		dbms_output.put_line( 'error : ' || SQLERRM ); \
+	end;";
+	s << strProcedure, now, bRet, strErrMsg;
+	assert( bRet == true );
+	s << "create table tbl_test( x int )", now, bRet, strErrMsg;
+	assert( bRet == true );
+	// test select into int variable
+	int nCount;
+	s << "select count(1) from user_tables where lower( table_name ) = 'tbl_test'", into( nCount ), now, bRet, strErrMsg;
+	assert( bRet == true );
+	assert( nCount == 1 );
+	// test select into string variable
+	string strValue = "";
+	s << "select table_name from user_tables where lower( table_name ) = 'tbl_test'", into( strValue ), now, bRet, strErrMsg;
+	assert( bRet == true );
+	assert( strValue == "TBL_TEST" );
+	s << "select 'this is a test for long string. hello Mr DanDan.' from dual", into( strValue ), now, bRet, strErrMsg;
+	assert( bRet );
+	assert( strValue == "this is a test for long string. hello Mr DanDan." );
+	// test select into struct tm 
+	struct tm objStructTm;
+	s << "select to_date( '2014-12-30 10:43:00', 'yyyy-mm-dd hh24:mi:ss') from dual", into( objStructTm ), now, bRet, strErrMsg;
+	assert( bRet == true );
+	assert( objStructTm.tm_year == 2014 - 1900 );
+	assert( objStructTm.tm_mon == 11 );
+	assert( objStructTm.tm_mday == 30 );
+	assert( objStructTm.tm_hour == 10 );
+	assert( objStructTm.tm_min == 43 );
+	assert( objStructTm.tm_sec == 0 );
+	s << "drop table tbl_test", now, bRet, strErrMsg;
+	assert( bRet == true );
+	assert( strErrMsg.empty() );
+}
+
+void TestUserTableSelect()
+{
+	test_db_config::DbConfig config;
+	bool bRet = config.Init();
+	assert( bRet == true );
+	occiwrapper::ConnectionInfo info( config.GetStrIp(), 1521, config.GetUserName(), config.GetPassword(), config.GetSid() );
+	occiwrapper::SessionFactory sf;
+	occiwrapper::Session s = sf.Create( info );
+	string strErrMsg = "";
+	s << "create table tbl_test( x int )", now, bRet, strErrMsg;
+	assert( bRet == true );
+	vector< int > vCount;
+	s << "select count(1) from user_tables where lower( table_name ) = 'tbl_test'", into( vCount ), now, bRet, strErrMsg;
+	assert( bRet == true );
+	assert( vCount.size() == 1 );
+	assert( vCount[ 0 ] == 1 );
+	s << "drop table tbl_test", now, bRet, strErrMsg;
+	assert( bRet == true );
+	assert( strErrMsg.empty() );
+}
+
 void TestDDL( )
 {
 	test_db_config::DbConfig config;
@@ -453,6 +529,12 @@ void TestSelectWithLimit()
 	assert( bRet );
 	assert( vec1.size() == 5 );
 	assert( vec2.size() == 5 );
+
+	//test: select multiply value, but only first value into the number
+	int nMaxNumber;
+	s << "select x from tbl_test2 order by x desc", into( nMaxNumber ), now, bRet;
+	assert( bRet );
+	assert( nMaxNumber == 24);
 }
 
 //test select with single step
@@ -491,15 +573,18 @@ void TestSelectSingleStep()
 	stmt = ( s << "select * from tbl_test2 t", into( vec1 ), into( vec2 ), limit( 2 ) );
 	///< first select option, getting 2 items
 	assert( stmt.Execute() == true );
-	assert( stmt.Done() == false );
+	assert( stmt.HasNext() == true );
+	assert( stmt.Done() == true );
 	assert( vec1.size() == 2 && vec2.size() == 2 );
 	///< second select option, getting 2 items
 	assert( stmt.Execute() == true );
-	assert( stmt.Done() == false );
+	assert( stmt.HasNext() == true );
+	assert( stmt.Done() == true );
 	assert( vec1.size() == 4 && vec2.size() == 4 );
 	///< third select option, getting only 1 item.
 	assert( stmt.Execute() == true );
 	assert( stmt.Done() == true );
+	assert( stmt.HasNext() == false );
 	assert( vec1.size() == 5 && vec2.size() == 5 );
 }
 
@@ -518,14 +603,12 @@ void TestDifferentTypeSelect()
 	struct tm* pTm;
 	time_t _time = time( NULL );
 	pTm = localtime( &_time );
-	string str = "123";
-	//tuple< float, string, struct tm, int, double > a[5] = { make_tuple( 2.0, "20", *pTm, 20, 2.0 ), make_tuple( 2.1, "21", *pTm, 21, 2.1 ), make_tuple( 2.3, "23", *pTm, 23, 2.3 ), make_tuple( 2.4, "24", *pTm, 24, 2.4 ), make_tuple( 2.5, "25", *pTm, 25, 2.5 ) };
 	tuple< float, string, struct tm, int, double > a[5];
-	a[0] = make_tuple( 2.0, str, *pTm, 20, 2.0 );
-	a[1] = make_tuple( 2.1, str, *pTm, 21, 2.1 );
-	a[2] = make_tuple( 2.3, str, *pTm, 23, 2.3 );
-	a[3] = make_tuple( 2.4, str, *pTm, 24, 2.4 );
-	a[4] = make_tuple( 2.5, str, *pTm, 25, 2.5 );
+	a[0] = make_tuple( 2.0, "1", *pTm, 20, 2.0 );
+	a[1] = make_tuple( 2.1, "2", *pTm, 21, 2.1 );
+	a[2] = make_tuple( 2.3, "3", *pTm, 23, 2.3 );
+	a[3] = make_tuple( 2.4, "4", *pTm, 24, 2.4 );
+	a[4] = make_tuple( 2.5, "5", *pTm, 25, 2.5 );
 	vector< tuple< float, string, struct tm, int, double > > vec( a, a + 5 );
 	s << "truncate table test_batched_table", now, bRet, strErrMsg;
 	assert( bRet );
@@ -544,6 +627,38 @@ void TestDifferentTypeSelect()
 	assert( vInt.size() == 5 );
 	assert( vFloat.size() == 5 );
 	assert( vDouble.size() == 5 );
+
+	vector< tuple< float > > vOut1;
+	s << "select float_value from test_batched_table", into( vOut1 ), now, bRet, strErrMsg;
+	assert( bRet );
+	assert( vOut1.size() == 5 ) ;
+
+	vector< tuple< float, string > > vOut2;
+	s << "select float_value, string_value from test_batched_table", into( vOut2 ), now, bRet, strErrMsg;
+	assert( bRet );
+	assert( vOut2.size() == 5 ) ;
+
+	vector< tuple< struct tm, int, double > > vOut3;
+	s << "select date_value, int_value, number_value from test_batched_table", into( vOut3 ), now, bRet, strErrMsg;
+	assert( bRet );
+	assert( vOut3.size() == 5 ) ;
+
+	vOut2.clear();
+	vOut3.clear();
+	s << "select  float_value, string_value, date_value, int_value, number_value from test_batched_table", into( vOut2 ), into( vOut3 ), now, bRet, strErrMsg;
+	assert( bRet );
+	assert( vOut2.size() == 5 );
+	assert( vOut3.size() == 5 );
+
+	vector< tuple< float, string, struct tm, int > > vOut4;
+	s << "select float_value, string_value, date_value, int_value from test_batched_table", into( vOut4 ), now, bRet, strErrMsg;
+	assert( bRet );
+	assert( vOut4.size() == 5 ) ;
+
+	vector< tuple< float, string, struct tm, int, double > > vAll;
+	s << "select float_value, string_value, date_value, int_value, number_value from test_batched_table", into( vAll ), now, bRet, strErrMsg;
+	assert( bRet );
+	assert( vAll.size() == 5 ) ;
 }
 
 // test empty
@@ -564,12 +679,12 @@ void TestEmptyValue()
 	vec.push_back( "" );
 	vec.push_back( "3" );
 
-	vector< int > vecInt;
-	vecInt.push_back( 1 );
-	vecInt.push_back( 2 );
-	vecInt.push_back( 3 );
+	list< int > listInt;
+	listInt.push_back( 1 );
+	listInt.push_back( 2 );
+	listInt.push_back( 3 );
 
-	s << "insert into test_batched_table( string_value, int_value ) values ( :1, :2 )", batched_use( vec ), batched_use( vecInt ), now, bRet, strErrMsg;
+	s << "insert into test_batched_table( string_value, int_value ) values ( :1, :2 )", batched_use( vec ), batched_use( listInt ), now, bRet, strErrMsg;
 	assert( bRet );
 
 	vector< string > vStr;
@@ -638,8 +753,71 @@ void TestMillionDataProcess()
 	vector< occiwrapper::UInt64 > vInt;
 	vector< float > vFloat;
 	vector< double > vDouble;
-	s << "select string_value, date_value, int_value, float_value, number_value from test_batched_table order by int_value asc", into( vStr ), into( vDate ), into( vInt ), into( vFloat ), into( vDouble ), limit( 10 ), now, bRet, strErrMsg;
+	s << "select string_value, date_value, int_value, float_value, number_value from test_batched_table order by int_value asc", into( vStr ), into( vDate ), into( vInt ), into( vFloat ), into( vDouble ), limit( 20000 ), now, bRet, strErrMsg;
 	assert( bRet );
 }
 
 
+//test process large amount of data for list
+void TestMillionDataProcessList()
+{
+	test_db_config::DbConfig config;
+	bool bRet = config.Init();
+	assert( bRet == true );
+	occiwrapper::ConnectionInfo info( config.GetStrIp(), 1521, config.GetUserName(), config.GetPassword(), config.GetSid() );
+	occiwrapper::SessionFactory sf;
+	occiwrapper::Session s = sf.Create( info );
+	string strErrMsg;
+	s << "truncate table test_batched_table", now, bRet, strErrMsg;
+	assert( bRet );
+
+	struct tm tm_value;
+	time_t now_time = time( NULL );
+#ifdef WIN32
+	localtime_s( &tm_value, &now_time );
+#else
+	localtime_r( &now_time, &tm_value );
+#endif // WIN32
+
+	list< string > listStr;
+	list< struct tm >  listTm;
+	list< occiwrapper::Int32 > listInt32;
+	list< float > listFloat;
+	list< double > listDouble;
+
+	char vBuf[1024] = "\0";
+	const int nTocalBatchCount = 2; // as list push_back and clear is time wasted, setting it to 1, you can reset it yourself.
+	const int nTestCount = 10000;
+	for( size_t k = 0; k < nTocalBatchCount; ++ k )
+	{
+		for( size_t i = k * nTestCount; i < k * nTestCount + nTestCount; ++ i )
+		{
+			//itoa( i, vBuf, 10 ); // as itoa is indeed non-standard, use sprintf instead
+			sprintf( vBuf, "%d", i );
+			listStr.push_back( vBuf );
+			listTm.push_back( tm_value );
+			listInt32.push_back( i );
+			listFloat.push_back( ( double ) i / 2 );
+			listDouble.push_back( ( double ) i / 2 );
+		}
+		s << "insert into test_batched_table( string_value, date_value, int_value, float_value, number_value ) values ( :1, :2, :3, :4, :5 )", batched_use( listStr ), batched_use( listTm ), batched_use( listInt32 ), batched_use( listFloat ), batched_use( listDouble ), now, bRet, strErrMsg;
+		assert( bRet );
+		listStr.clear();
+		listTm.clear();
+		listInt32.clear();
+		listFloat.clear();
+		listDouble.clear();
+	}
+	list< string > vStr;
+	list< struct tm > vDate;
+	list< occiwrapper::UInt64 > vInt;
+	list< float > vFloat;
+	list< double > vDouble;
+	s << "select string_value, date_value, int_value, float_value, number_value from test_batched_table order by int_value asc", into( vStr ), into( vDate ), into( vInt ), into( vFloat ), into( vDouble ), limit( 20000 ), now, bRet, strErrMsg;
+	assert( bRet );
+	assert( vStr.size() == 20000 );
+	assert( vDate.size() == 20000 );
+	assert( vInt.size() == 20000 );
+	assert( vFloat.size() == 20000 );
+	assert( vDouble.size() == 20000 );
+}

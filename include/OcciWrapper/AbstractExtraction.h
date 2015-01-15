@@ -71,18 +71,18 @@ namespace occiwrapper
 		*		nLimit: set limit
 		*	@add by CUCmehp
 		*/
-		//void SetLimit( UInt32 nLimit );
+		void SetLimit( UInt32 nLimit );
 
 		/***
 		*	@brief: gets the limit.
 		*	@return:
 		*		return limit
 		*/
-		//UInt32 GetLimit() const;
+		UInt32 GetLimit() const;
 
 	private:
 		AbstractExtractor*	m_pExtractor;
-		//UInt32				m_nLimit;
+		UInt32				m_nLimit;
 
 	};
 

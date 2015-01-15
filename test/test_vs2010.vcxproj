@@ -18,6 +18,7 @@
     <ClCompile Include="TestConnectionPool.cpp" />
     <ClCompile Include="TestEnviroment.cpp" />
     <ClCompile Include="TestSessionFactory.cpp" />
+    <ClCompile Include="TestTuple.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.h" />
@@ -27,6 +28,7 @@
     <ClInclude Include="TestConnectionPool.h" />
     <ClInclude Include="TestEnviroment.h" />
     <ClInclude Include="TestSessionFactory.h" />
+    <ClInclude Include="TestTuple.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{56C223D8-2DD9-4942-8844-88A44CABC547}</ProjectGuid>

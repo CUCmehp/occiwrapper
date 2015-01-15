@@ -170,14 +170,9 @@ namespace occiwrapper
 		void FetchImpl();
 
 		/***
-		*	@brief: Executes with an upper limit set.
-		*/
-		void ExecuteWithLimit();
-
-		/***
-		*	@brief: Executes without upper limit set.
-		*/
-		void ExecuteWithoutLimit();
+		*	@brief: execute SQL for implementation.
+		*/			
+		void ExecuteImpl();
 
 		/***
 		*	@brief: reverse binding is getting result from database for out parameters
@@ -193,6 +188,11 @@ namespace occiwrapper
 		*	@brief: get all extractions of this statement.
 		*/
 		vector< shared_ptr< AbstractExtraction > >& GetExtractions();
+
+		/***
+		*	@brief: get min limit of all extractions of this statement.
+		*/
+		int GetExtractionMinLimit();
 
 		/***
 		*	@brief: if the query has next data
@@ -215,6 +215,7 @@ namespace occiwrapper
 		vector< shared_ptr< AbstractExtraction > >			m_vExtractions;
 		bool												m_bHasExtractor;
 		bool												m_bHasNext;							// next fetch will get data
+		bool												m_bGotEnoughData;					// has got enough data
 		bool												m_bAutoCommit;
 		bool												m_bSuccessed;						//execute succeed or not
 		string												m_strErrMsg;						// if failed, saved error message

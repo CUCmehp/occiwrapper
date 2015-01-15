@@ -1,9 +1,24 @@
-1.版本1.0.0
+﻿1.版本1.0.0
 基础功能发布
 
 2.版本1.0.1
-(1).修改空Session执行内存AC异常。
-(2).修改TypeHander中retrieve struct tm类型时，小时处理的Bug。
+(1)修改空Session执行内存AC异常
+(2)修改TypeHander中retrieve struct tm类型时，小时处理的Bug
+
+3.版本1.0.2
+(1)增回select into简单变量
+(2)将批量取记录的默认条数设置为10000
+(3)增加批量插入对std::list的支持
+(4)增加批量读取对std::list的支持
+(5)去掉extract函数中多余的对象参数
+(6)增加将tuple对象插入数据库表中的支持
+(7)增加从数据库表中取一条记录取放到tuple对象中
+(8)增加从数据库表中取出记录取放到vector<tuple>对象中
+(9)将批量操作对tuple中元组个数支持增加到10个
+(5)增加批量插入对std::list< tuple >的支持
+(6)增加批量读取对std::list< tuple >的支持
+
+
 
 
 

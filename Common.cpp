@@ -17,6 +17,21 @@ size_t occiwrapper::GetVectorStringMaxLength( const vector< string >& vec )
 	return max_value;
 }
 
+size_t occiwrapper::GetListMaxStringLength(const list< string >& vList )
+{
+	{
+		size_t nMaxValue = 0;
+		for( list< string >::const_iterator it = vList.begin(); it != vList.end(); ++ it )
+		{
+			if( it->size() > nMaxValue )
+			{
+				nMaxValue = it->size();
+			}
+		}
+		return nMaxValue;
+	}
+}
+
 oracle::occi::Date occiwrapper::ToDate( const struct tm& tm_value, oracle::occi::Environment* pEnv )
 {
 	char strBuf[ 256 ];

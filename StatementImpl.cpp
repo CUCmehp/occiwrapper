@@ -11,6 +11,7 @@ occiwrapper::StatementImpl::StatementImpl( oracle::occi::Statement* pOcciStat, s
 ,m_nBatchedNum( 0 )
 ,m_bBatched( false )
 ,m_bHasNext( false )
+,m_bGotEnoughData( false )
 {
 	this->m_pOcciStat = pOcciStat;
 	this->m_pOcciResult = NULL;
@@ -97,14 +98,7 @@ bool occiwrapper::StatementImpl::Execute()
 {
 	try
 	{
-		if ( m_objLimit.value() == occiwrapper::Limit::LIMIT_UNLIMITED )
-		{
-			ExecuteWithoutLimit();
-		}
-		else
-		{
-			ExecuteWithLimit();
-		}
+		ExecuteImpl();
 
 		if( m_bAutoCommit )
 			m_pConnection->Commit();
@@ -165,6 +159,26 @@ occiwrapper::StatementImpl::State occiwrapper::StatementImpl::GetState() const
 	return this->m_eState;
 }
 
+int occiwrapper::StatementImpl::GetExtractionMinLimit()
+{
+	int nMinValue = numeric_limits< int >::max();
+	for( size_t i = 0; i < m_vExtractions.size(); ++ i )
+	{
+		if( m_vExtractions[ i ]->GetLimit() == Limit::LIMIT_UNLIMITED )
+		{
+			continue;
+		}
+		else
+		{
+			if( m_vExtractions[ i ]->GetLimit() < ( occiwrapper::UInt32 )nMinValue )
+			{
+				nMinValue = m_vExtractions[ i ]->GetLimit();
+			}
+		}
+	}
+	return nMinValue;
+}
+
 void occiwrapper::StatementImpl::Compile()
 {
 	if ( m_eState == ST_INITIALIZED )
@@ -173,6 +187,14 @@ void occiwrapper::StatementImpl::Compile()
 		m_eState = ST_COMPILED;
 
 		this->m_bHasExtractor = !m_vExtractions.empty();
+		// if has extractor, set limit from extractions.
+		if( m_bHasExtractor )
+		{
+			int nLimitValue = this->m_objLimit.value() == Limit::LIMIT_UNLIMITED ? numeric_limits< int >::max() : this->m_objLimit.value();
+			int nExtractionMinLimit = GetExtractionMinLimit();
+			int nMinLimit = min( nLimitValue, nExtractionMinLimit );
+			this->SetExtractionLimit( nMinLimit );
+		}
 
 	}
 	else if ( m_eState == ST_RESET)
@@ -240,7 +262,7 @@ void occiwrapper::StatementImpl::Fetch()
 	if( m_eState == ST_BOUND )
 	{
 		FetchImpl();
-		if( !m_bHasNext )
+		if( !m_bHasNext || m_bGotEnoughData )
 		{
 			m_eState = ST_DONE;
 		}
@@ -278,18 +300,24 @@ void occiwrapper::StatementImpl::FetchImpl()
 			// if has get enough data, then break
 			if( nTotalBatchedCount >= this->m_objLimit.value() )
 			{
+				m_bGotEnoughData = true;
 				break;
+			}
+			else
+			{
+				m_bGotEnoughData = false;
 			}
 		}
 
 		// set m_bHasNext flag
-		if( eState != oracle::occi::ResultSet::END_OF_FETCH )
+		if( eState == oracle::occi::ResultSet::END_OF_FETCH )
 		{
-			m_bHasNext = true;
+			m_bGotEnoughData = true;
+			m_bHasNext = false;
 		}
 		else
 		{
-			m_bHasNext = false;
+			m_bHasNext = true;
 		}
 		
 	}
@@ -300,89 +328,6 @@ void occiwrapper::StatementImpl::FetchImpl()
 	catch( std::exception& exc )
 	{
 		throw exc;
-	}
-	catch( ... )
-	{
-		throw OcciSqlException( "occi unknown exception when executeWithoutLimit" );
-	}
-}
-
-void occiwrapper::StatementImpl::ExecuteWithLimit()
-{
-	UInt32 count = 0;
-	assert( m_eState != ST_DONE );
-	Compile();
-
-	Bind();
-
-	try
-	{
-		if( !this->m_bHasExtractor )
-		{
-			if( !m_bBatched )
-			{
-				m_pOcciStat->execute();
-			}
-			else
-			{
-				m_pOcciStat->executeArrayUpdate( this->m_nBatchedNum );
-			}
-			m_eState = ST_DONE;
-		}
-		// execute query
-		else
-		{
-			if( !m_bHasNext )
-			{
-				m_pOcciResult = m_pOcciStat->executeQuery();
-				this->m_pExtrator->SetOcciResultSet( m_pOcciResult );
-				Extract();
-			}
-		}
-	}
-	catch( oracle::occi::SQLException& exc )
-	{
-		throw OcciSqlException( exc.what() );
-	}
-	catch( ... )
-	{
-		throw OcciSqlException( "occi unknown exception when executeWithoutLimit" );
-	}
-}
-
-void occiwrapper::StatementImpl::ExecuteWithoutLimit()
-{
-	UInt32 count = 0;
-	assert( m_eState != ST_DONE );
-	Compile();
-
-	Bind();
-
-	try
-	{
-		if( !this->m_bHasExtractor )
-		{
-			if( !m_bBatched )
-			{
-				m_pOcciStat->execute();
-			}
-			else
-			{
-				m_pOcciStat->executeArrayUpdate( this->m_nBatchedNum );
-			}
-			m_eState = ST_DONE;
-		}
-		// execute query
-		else
-		{
-			m_pOcciResult = m_pOcciStat->executeQuery();
-			this->m_pExtrator->SetOcciResultSet( m_pOcciResult );
-			Extract();
-		}
-	}
-	catch( oracle::occi::SQLException& exc )
-	{
-		throw OcciSqlException( exc.what() );
 	}
 	catch( ... )
 	{
@@ -432,3 +377,47 @@ bool occiwrapper::StatementImpl::HasNext()
 {
 	return m_bHasNext;
 }
+
+void occiwrapper::StatementImpl::ExecuteImpl()
+{
+	UInt32 count = 0;
+	assert( m_eState != ST_DONE );
+	Compile();
+
+	Bind();
+
+	try
+	{
+		if( !this->m_bHasExtractor )
+		{
+			if( !m_bBatched )
+			{
+				m_pOcciStat->execute();
+			}
+			else
+			{
+				m_pOcciStat->executeArrayUpdate( this->m_nBatchedNum );
+			}
+			m_eState = ST_DONE;
+		}
+		// execute query
+		else
+		{
+			if( !m_bHasNext )
+			{
+				m_pOcciResult = m_pOcciStat->executeQuery();
+				this->m_pExtrator->SetOcciResultSet( m_pOcciResult );
+				Extract();
+			}
+		}
+	}
+	catch( oracle::occi::SQLException& exc )
+	{
+		throw OcciSqlException( exc.what() );
+	}
+	catch( ... )
+	{
+		throw OcciSqlException( "occi unknown exception when ExecuteImpl" );
+	}
+}
+
