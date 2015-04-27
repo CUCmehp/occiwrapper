@@ -12,6 +12,7 @@
 #include "OcciWrapper/Exception.h"
 #include "OcciWrapper/AbstractExtractor.h"
 #include <string.h>
+#include <malloc.h>
 
 using namespace std;
 
