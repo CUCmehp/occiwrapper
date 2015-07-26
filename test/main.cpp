@@ -3,6 +3,10 @@
 #include "TestEnviroment.h"
 #include "TestSessionFactory.h"
 #include "TestTuple.h"
+#include "TestObj.h"
+#include "TestBlob.h"
+#include "TestByteOrder.h"
+#include "TestClob.h"
 #include <iostream>
 #include <time.h>
 
@@ -166,6 +170,7 @@ int main( int argc, char* argv[] )
 	TestSingleTupleInsertAndSelect();
 	std::cout << "TestSingleTupleInsertAndSelect finish" << std::endl;
 
+	// test tuple
 	std::cout << "start to run TestMultipleRecordForTuple:" << std::endl;
 	TestMultipleRecordForTuple();
 	std::cout << "TestMultipleRecordForTuple finish" << std::endl;
@@ -181,6 +186,79 @@ int main( int argc, char* argv[] )
 	std::cout << "start to run TestTupleList:" << std::endl;
 	TestTupleList();
 	std::cout << "TestTupleList finish" << std::endl;
+
+	std::cout << "start to run TestByteOrder:" << std::endl;
+	TestByteOrderAll();
+	std::cout << "TestByteOrder finish" << std::endl;
+
+	std::cout << "start to run TestBlob:" << std::endl;
+	TestLobBase();
+	TestBlob();
+	TestBlobStreams();
+	std::cout << "TestBlob finish" << std::endl;
+
+	std::cout << "start to run TestSingleBlob:" << std::endl;
+	TestSingleBlob();
+	std::cout << "TestSingleBlob finish" << std::endl;
+
+	std::cout << "start to run TestVectorBlob:" << std::endl;
+	TestVectorBlob();
+	std::cout << "TestVectorBlob finish" << std::endl;
+
+	std::cout << "start to run TestBlobBinding:" << std::endl;
+	TestBlobBinding();
+	std::cout << "TestBlobBinding finish" << std::endl;
+
+	std::cout << "start to run TestVecBlobBinding:" << std::endl;
+	TestVecBlobBinding();
+	std::cout << "TestVecBlobBinding finish" << std::endl;
+
+	std::cout << "start to run TestVecBlobBinding:" << std::endl;
+	TestListBlob();
+	std::cout << "TestVecBlobBinding finish" << std::endl;
+
+	std::cout << "start to run TestProcedureBlob:" << std::endl;
+	TestProcedureBlob();
+	std::cout << "TestProcedureBlob finish" << std::endl;
+
+	std::cout << "start to run TestSingleClob:" << std::endl;
+	TestSingleClob();
+	std::cout << "TestSingleClob finish" << std::endl;
+
+	std::cout << "start to run TestVectorClob:" << std::endl;
+	TestVectorClob();
+	std::cout << "TestVectorClob finish" << std::endl;
+
+	std::cout << "start to run TestClobBinding:" << std::endl;
+	TestClobBinding();
+	std::cout << "TestClobBinding finish" << std::endl;
+
+	std::cout << "start to run TestVecBlobBinding:" << std::endl;
+	TestVecClobBinding();
+	std::cout << "TestVecBlobBinding finish" << std::endl;
+
+	std::cout << "start to run TestListClob:" << std::endl;
+	TestListClob();
+	std::cout << "TestListClob finish" << std::endl;
+
+	std::cout << "start to run TestProcedureClob:" << std::endl;
+	TestProcedureClob();
+	std::cout << "TestProcedureClob finish" << std::endl;
+
+	// test single object
+	std::cout << "start to run TestSingleObject:" << std::endl;
+	TestSingleObj();
+	std::cout << "TestSingleObject finish" << std::endl;
+
+	// test object vector
+	std::cout << "start to run TestObjectVector:" << std::endl;
+	TestObjectVector();
+	std::cout << "TestObjectVector finish" << std::endl;
+
+	// test object list
+	std::cout << "start to run TestObjectList:" << std::endl;
+	TestObjectList();
+	std::cout << "TestObjectList finish" << std::endl;
 
 	std::cout << "finish running all test!" << std::endl;
 	getchar();

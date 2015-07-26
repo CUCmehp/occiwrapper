@@ -1,6 +1,9 @@
 #include "OcciWrapper/SessionFactory.h"
 
-occiwrapper::SessionFactory::SessionFactory()
+occiwrapper::SessionFactory::SessionFactory( string strCharset, string strNCharset )
+	: m_strCharset( strCharset )
+	, m_strNCharset( strNCharset )
+	, m_objConnectionPool( strCharset, strNCharset )
 {
 	
 }

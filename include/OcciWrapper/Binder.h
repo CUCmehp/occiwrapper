@@ -23,7 +23,7 @@ namespace occiwrapper
 		*		pOcciStat: occi statement for this binder.
 		*		pEnv: point to occi environment.
 		*/
-		Binder( oracle::occi::Statement* pOcciStat, oracle::occi::Environment* pEnv );
+		Binder( oracle::occi::Statement* pOcciStat, oracle::occi::Environment* pEnv, oracle::occi::Connection* pOcciConn );
 
 		/***
 		*	@brief: set occi statement for this binder.
@@ -45,6 +45,13 @@ namespace occiwrapper
 		*		occi environment for this binder.
 		*/
 		virtual oracle::occi::Environment* GetEnv();
+
+		/***
+		*	@brief: get occi connection for this binder.
+		*	@return: 
+		*		occi environment for this binder.
+		*/
+		virtual oracle::occi::Connection* GetOcciConn();
 
 		/***
 		*	@brief: destroys the binder.
@@ -292,6 +299,38 @@ namespace occiwrapper
 		virtual void Retrieve( std::size_t nPos, const char* const& val );
 
 		/***
+		*	@brief: Binds a blob object.
+		*	@parameters:
+		*		nPos: parameter index.
+		*		blob:  parameter value
+		*/
+		virtual void Bind(std::size_t nPos, const Blob& blob );
+
+		/***
+		*	@brief: Retrieve a blob object.
+		*	@parameters:
+		*		nPos: parameter index.
+		*		val:  parameter value
+		*/
+		virtual void Retrieve( std::size_t nPos, Blob& val );
+
+		/***
+		*	@brief: Binds a clob object.
+		*	@parameters:
+		*		nPos: parameter index.
+		*		clob:  parameter value
+		*/
+		virtual void Bind(std::size_t nPos, const Clob& clob );
+
+		/***
+		*	@brief: Retrieve a clob object.
+		*	@parameters:
+		*		nPos: parameter index.
+		*		val:  parameter value
+		*/
+		virtual void Retrieve( std::size_t nPos, Clob& val );
+
+		/***
 		*	@brief: batched bind a buf to oracle parameter.
 		*	@parameters:
 		*		nPos: parameter index.
@@ -312,6 +351,9 @@ namespace occiwrapper
 
 		// Occi Enironment
 		oracle::occi::Environment* m_pEnv;
+
+		// Occi Connection, used for lob object
+		oracle::occi::Connection* m_pOcciConn;
 
 		// for binding
 		std::vector< shared_ptr< OcciDataBuffer > > m_vBindArray;

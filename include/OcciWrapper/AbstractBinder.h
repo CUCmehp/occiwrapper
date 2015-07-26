@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Common.h"
+#include "Lob.h"
 
 namespace occiwrapper
 {
@@ -173,6 +174,26 @@ namespace occiwrapper
 		virtual void Retrieve( std::size_t nPos, struct tm& val ) = 0;
 
 		/***
+		*	@brief: binds a struct tm.
+		*/
+		virtual void Bind( std::size_t nPos, const Blob& val ) = 0;
+
+		/***
+		*	@brief: retrieve a struct tm.
+		*/
+		virtual void Retrieve( std::size_t nPos, Blob& val ) = 0;
+
+		/***
+		*	@brief: binds a struct tm.
+		*/
+		virtual void Bind( std::size_t nPos, const Clob& val ) = 0;
+
+		/***
+		*	@brief: retrieve a struct tm.
+		*/
+		virtual void Retrieve( std::size_t nPos, Clob& val ) = 0;
+
+		/***
 		*	@brief: batched bind a buf to oracle parameter.
 		*	@parameters:
 		*		nPos: parameter index.
@@ -186,15 +207,15 @@ namespace occiwrapper
 
 		/***
 		*	@brief: get environment.
-		*	@parameters:
-		*		nPos: parameter index.
-		*		pBuf: buffer pointer.
-		*		nEachBufLength: buffer length for every data item, data length must less than nEachBufLength.
-		*		pLength: pointer to length of every data item.
-		*		pInd: pointer to the data is NULL or not, if the value is -1, then the data referred to is NULL.
-		*		type: occi data type.
 		*/
 		virtual oracle::occi::Environment* GetEnv() = 0;
+
+		/***
+		*	@brief: get occi connection for this binder.
+		*	@return: 
+		*		occi environment for this binder.
+		*/
+		virtual oracle::occi::Connection* GetOcciConn() = 0;
 
 		/***
 		*	@brief: registered as out variable

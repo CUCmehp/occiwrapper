@@ -18,7 +18,22 @@
 (5)增加批量插入对std::list< tuple >的支持
 (6)增加批量读取对std::list< tuple >的支持
 
+3.版本1.0.3
+(1)支持对象的数据库操作
+(2)修改在Suse11无法编译TypeHander.h的Bug。
+原因：g++ 4.3的一个兼容性问题，是由于gcc 4.3取消了头文件多层关联造成的。
+在TyperHandler中使用了malloc，但未声明<malloc.h>，因此在gcc 4.3编译中出现该问题。
+解决：在TypeHander.h上添加了<malloc.h>头文件引用。
+(3)修改Bug，使用gcc 4.3和gcc 4.4时，无法编译TestTuple.cpp的Bug。
+原因：在Centos6.6上使用gcc 4.3和gcc 4.4.7时，不支持在tuple的以下形式的调用，
+tuple< int > t = make_tuple( 10 );
+必须写为 tuple< int > t( 10 );
+在高版本的g++上支持以下语法。
+解决：修改tuple的使用方法，使其兼容低版本的gcc。
 
+4.版本1.0.4
+(1)支持CLOB对象和BLOB对象的存取
+(2)在建立SessionFactory时，允许设置字符集
 
 
 

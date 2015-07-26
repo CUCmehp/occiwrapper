@@ -2,7 +2,7 @@
 bin_PROGRAMS=test
 configdir=$(prefix)/bin
 config_DATA=db_config.ini
-test_SOURCES=main.cpp TestConnection.cpp TestConnectionPool.cpp TestEnviroment.cpp TestSessionFactory.cpp Config.cpp DbConfig.cpp TestTuple.cpp
+test_SOURCES=main.cpp TestConnection.cpp TestConnectionPool.cpp TestEnviroment.cpp TestSessionFactory.cpp Config.cpp DbConfig.cpp TestTuple.cpp TestBlob.cpp TestClob.cpp TestObj.cpp TestByteOrder.cpp
 #LIBS=-locciwrapper
 #AM_CPPFLAGS=-std=c++11
 #AM_CPPFLAGS=-std=c++0x

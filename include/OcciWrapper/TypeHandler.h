@@ -13,6 +13,7 @@
 #include "OcciWrapper/AbstractExtractor.h"
 #include <string.h>
 #include <malloc.h>
+#include "OcciWrapper/Lob.h"
 
 using namespace std;
 
@@ -300,6 +301,62 @@ namespace occiwrapper
 		}
 	};
 
+	template<>
+	class TypeConvertor< Blob >
+	{
+	public:
+		static enum oracle::occi::Type Convert()
+		{
+			return oracle::occi::OCCI_SQLT_BLOB;
+		};
+
+		static Blob retrieve( void* pBuf, const int& length, const int& ind )
+		{
+			Blob retBlob;
+			oracle::occi::Blob* pBlob = ( oracle::occi::Blob* )pBuf;
+			unsigned char strBuf[ 10240 ];
+			memset( strBuf, 0, 10240 );
+
+			unsigned int nOffset = 1;
+			unsigned int nRet = 0;
+			while( ( nRet = pBlob->read( 10240, strBuf, 10240, nOffset ) ) > 0  )
+			{
+				nOffset += nRet;
+				retBlob.AppendRaw( ( char* )strBuf, nRet );
+			}
+			retBlob.SetOcciBlob( *pBlob );
+			return retBlob;
+		}
+	};
+
+	template<>
+	class TypeConvertor< Clob >
+	{
+	public:
+		static enum oracle::occi::Type Convert()
+		{
+			return oracle::occi::OCCI_SQLT_CLOB;
+		};
+
+		static Clob retrieve( void* pBuf, const int& length, const int& ind )
+		{
+			Clob retClob;
+			oracle::occi::Clob* pClob = ( oracle::occi::Clob* )pBuf;
+			unsigned char strBuf[ 10240 ];
+			memset( strBuf, 0, 10240 );
+
+			unsigned int nOffset = 1;
+			unsigned int nRet = 0;
+			while( ( nRet = pClob->read( 10240, strBuf, 10240, nOffset ) ) > 0  )
+			{
+				nOffset += nRet;
+				retClob.AppendRaw( ( char* )strBuf, nRet );
+			}
+			retClob.SetOcciClob( *pClob );
+			return retClob;
+		}
+	};
+
 	/***
 	*	@add by CUCmehp
 	*/
@@ -318,8 +375,6 @@ namespace occiwrapper
 			assert( p_binder != 0 );
 			p_binder->Retrieve( pos, obj );
 		}
-
-		//static void batched_bind( std::size_t pos, const vector<T>& vec_obj, AbstractBinder* pBinder );
 
 		static std::size_t size()
 		{
@@ -462,6 +517,120 @@ namespace occiwrapper
 			assert( vDataBuf.size() == 1 );
 			shared_ptr< OcciDataBuffer > pDataBuf = vDataBuf[ 0 ];
 			objResult = TypeConvertor< struct tm >::retrieve( ( ( void* )( ( char* )pDataBuf->m_pBuffer + pDataBuf->m_nDataBufMaxPerLength * 0 ) ) , *( pDataBuf->m_pDataLength + 0 ), *( pDataBuf->m_pInd + 0 ) );
+		}
+
+	private:
+		TypeHandler();
+		~TypeHandler();
+		TypeHandler(const TypeHandler&);
+		TypeHandler& operator = (const TypeHandler&);
+	};
+
+	/***
+	*	@add by CUCmehp
+	*/
+	template <>
+	class TypeHandler< Blob >
+	{
+	public:
+		static void bind(std::size_t pos, const Blob& obj, AbstractBinder* pBinder)
+		{
+			assert( pBinder != 0 );
+			pBinder->Bind( pos, obj );
+		}
+
+		static void retrieve( std::size_t pos, Blob& obj, AbstractBinder* p_binder )
+		{
+			assert( p_binder != 0 );
+			p_binder->Retrieve( pos, obj );
+		}
+
+		static std::size_t size()
+		{
+			return 1;
+		}
+
+		static void extract( std::size_t pos, AbstractExtractor* pExt )
+		{
+			size_t nCharBufMax = sizeof( oracle::occi::Blob );
+			assert( pExt != 0 );
+			// only one data to retrieve
+			size_t nRowRetrieve = 1;
+			size_t nAllBufLength = nCharBufMax * nRowRetrieve;
+			// set buffer
+			oracle::occi::Blob* pBlob = ( oracle::occi::Blob* )malloc( nAllBufLength );
+			memset( pBlob, 0, nAllBufLength );
+			char* p = ( char* )pBlob;
+			// set length array
+			UInt16* p_length = ( UInt16* )malloc( sizeof( UInt16 ) * nRowRetrieve );
+			// set indicator
+			Int16* p_Ind = ( Int16* )malloc( sizeof( Int16 ) * nRowRetrieve );
+			pExt->Extract( pos, p, nCharBufMax, p_length, p_Ind, TypeConvertor< Blob >::Convert() );
+		}
+
+		static void fetch( std::size_t pos, Blob& objResult, AbstractExtractor* pExtractor, vector< shared_ptr< OcciDataBuffer > >& vDataBuf, size_t nFetchedNum )
+		{
+			assert( nFetchedNum == 1 );
+			assert( vDataBuf.size() == 1 );
+			shared_ptr< OcciDataBuffer > pDataBuf = vDataBuf[ 0 ];
+			objResult = TypeConvertor< Blob >::retrieve( ( ( void* )( ( char* )pDataBuf->m_pBuffer + pDataBuf->m_nDataBufMaxPerLength * 0 ) ) , *( pDataBuf->m_pDataLength + 0 ), *( pDataBuf->m_pInd + 0 ) );
+		}
+
+	private:
+		TypeHandler();
+		~TypeHandler();
+		TypeHandler(const TypeHandler&);
+		TypeHandler& operator = (const TypeHandler&);
+	};
+
+		/***
+	*	@add by CUCmehp
+	*/
+	template <>
+	class TypeHandler< Clob >
+	{
+	public:
+		static void bind(std::size_t pos, const Clob& obj, AbstractBinder* pBinder)
+		{
+			assert( pBinder != 0 );
+			pBinder->Bind( pos, obj );
+		}
+
+		static void retrieve( std::size_t pos, Clob& obj, AbstractBinder* p_binder )
+		{
+			assert( p_binder != 0 );
+			p_binder->Retrieve( pos, obj );
+		}
+
+		static std::size_t size()
+		{
+			return 1;
+		}
+
+		static void extract( std::size_t pos, AbstractExtractor* pExt )
+		{
+			size_t nCharBufMax = sizeof( oracle::occi::Clob );
+			assert( pExt != 0 );
+			// only one data to retrieve
+			size_t nRowRetrieve = 1;
+			size_t nAllBufLength = nCharBufMax * nRowRetrieve;
+			// set buffer
+			oracle::occi::Clob* pClob = ( oracle::occi::Clob* )malloc( nAllBufLength );
+			memset( pClob, 0, nAllBufLength );
+			char* p = ( char* )pClob;
+			// set length array
+			UInt16* p_length = ( UInt16* )malloc( sizeof( UInt16 ) * nRowRetrieve );
+			// set indicator
+			Int16* p_Ind = ( Int16* )malloc( sizeof( Int16 ) * nRowRetrieve );
+			pExt->Extract( pos, p, nCharBufMax, p_length, p_Ind, TypeConvertor< Clob >::Convert() );
+		}
+
+		static void fetch( std::size_t pos, Clob& objResult, AbstractExtractor* pExtractor, vector< shared_ptr< OcciDataBuffer > >& vDataBuf, size_t nFetchedNum )
+		{
+			assert( nFetchedNum == 1 );
+			assert( vDataBuf.size() == 1 );
+			shared_ptr< OcciDataBuffer > pDataBuf = vDataBuf[ 0 ];
+			objResult = TypeConvertor< Clob >::retrieve( ( ( void* )( ( char* )pDataBuf->m_pBuffer + pDataBuf->m_nDataBufMaxPerLength * 0 ) ) , *( pDataBuf->m_pDataLength + 0 ), *( pDataBuf->m_pInd + 0 ) );
 		}
 
 	private:
@@ -1461,6 +1630,104 @@ namespace occiwrapper
 	};
 
 	// specialize vector for batched bind
+	template <>
+	class TypeHandler< vector< Blob > >
+	{
+	public:
+		static void bind(std::size_t pos, const vector< Blob >& obj, AbstractBinder* pBinder)
+		{
+			throw BindException( "can't bind empty blob vector, use empty_blob() instead!" );
+		}
+
+		static std::size_t size()
+		{
+			return TypeHandler< Blob >::size();
+		}
+
+		static void extract(std::size_t pos, AbstractExtractor* pExt)
+		{
+			size_t nCharBufMax = sizeof( oracle::occi::Blob );
+			assert( pExt != 0 );
+			size_t nAllBufLength = nCharBufMax * nBatchedRetrieveOnceCount;
+			// set buffer
+			oracle::occi::Blob* pBlob = ( oracle::occi::Blob* )malloc( nAllBufLength );
+			memset( pBlob, 0, nAllBufLength );
+			char* p = ( char* )pBlob;
+			// set length array
+			UInt16* p_length = ( UInt16* )malloc( sizeof( UInt16 ) * nBatchedRetrieveOnceCount );
+			// set indicator
+			Int16* p_Ind = ( Int16* )malloc( sizeof( Int16 ) * nBatchedRetrieveOnceCount );
+			pExt->Extract( pos, p, nCharBufMax, p_length, p_Ind, TypeConvertor< Blob >::Convert() );
+		}
+
+		static void fetch( std::size_t pos, vector< Blob >& vecResult, AbstractExtractor* pExtractor, vector< shared_ptr< OcciDataBuffer > >& vDataBuf, size_t nFetchedNum )
+		{
+			assert( vDataBuf.size() == 1 );
+			shared_ptr< OcciDataBuffer > pDataBuf = vDataBuf[ 0 ];
+			for( size_t i = 0; i < nFetchedNum; ++ i )
+			{
+				Blob obj = TypeConvertor< Blob >::retrieve( ( ( void* )( ( char* )pDataBuf->m_pBuffer + pDataBuf->m_nDataBufMaxPerLength * i ) ) , *( pDataBuf->m_pDataLength + i ), *( pDataBuf->m_pInd + i ) );
+				vecResult.push_back( obj );
+			}
+		}
+
+	private:
+		TypeHandler();
+		~TypeHandler();
+		TypeHandler(const TypeHandler&);
+		TypeHandler& operator = (const TypeHandler&);
+	};
+
+	// specialize vector for batched bind
+	template <>
+	class TypeHandler< vector< Clob > >
+	{
+	public:
+		static void bind(std::size_t pos, const vector< Clob >& obj, AbstractBinder* pBinder)
+		{
+			throw BindException( "can't bind empty clob vector, use empty_clob() instead!" );
+		}
+
+		static std::size_t size()
+		{
+			return TypeHandler< Clob >::size();
+		}
+
+		static void extract(std::size_t pos, AbstractExtractor* pExt)
+		{
+			size_t nCharBufMax = sizeof( oracle::occi::Clob );
+			assert( pExt != 0 );
+			size_t nAllBufLength = nCharBufMax * nBatchedRetrieveOnceCount;
+			// set buffer
+			oracle::occi::Clob* pClob = ( oracle::occi::Clob* )malloc( nAllBufLength );
+			memset( pClob, 0, nAllBufLength );
+			char* p = ( char* )pClob;
+			// set length array
+			UInt16* p_length = ( UInt16* )malloc( sizeof( UInt16 ) * nBatchedRetrieveOnceCount );
+			// set indicator
+			Int16* p_Ind = ( Int16* )malloc( sizeof( Int16 ) * nBatchedRetrieveOnceCount );
+			pExt->Extract( pos, p, nCharBufMax, p_length, p_Ind, TypeConvertor< Clob >::Convert() );
+		}
+
+		static void fetch( std::size_t pos, vector< Clob >& vecResult, AbstractExtractor* pExtractor, vector< shared_ptr< OcciDataBuffer > >& vDataBuf, size_t nFetchedNum )
+		{
+			assert( vDataBuf.size() == 1 );
+			shared_ptr< OcciDataBuffer > pDataBuf = vDataBuf[ 0 ];
+			for( size_t i = 0; i < nFetchedNum; ++ i )
+			{
+				Clob obj = TypeConvertor< Clob >::retrieve( ( ( void* )( ( char* )pDataBuf->m_pBuffer + pDataBuf->m_nDataBufMaxPerLength * i ) ) , *( pDataBuf->m_pDataLength + i ), *( pDataBuf->m_pInd + i ) );
+				vecResult.push_back( obj );
+			}
+		}
+
+	private:
+		TypeHandler();
+		~TypeHandler();
+		TypeHandler(const TypeHandler&);
+		TypeHandler& operator = (const TypeHandler&);
+	};
+
+	// specialize vector for batched bind
 	template < class T1 >
 	class TypeHandler< vector< tuple< T1 > > >
 	{
@@ -2243,6 +2510,104 @@ namespace occiwrapper
 			{
 				T obj = TypeConvertor< T >::retrieve( ( ( void* )( ( char* )pDataBuf->m_pBuffer + pDataBuf->m_nDataBufMaxPerLength * i ) ) , *( pDataBuf->m_pDataLength + i ), *( pDataBuf->m_pInd + i ) );
 				vResult.push_back( obj );
+			}
+		}
+
+	private:
+		TypeHandler();
+		~TypeHandler();
+		TypeHandler(const TypeHandler&);
+		TypeHandler& operator = (const TypeHandler&);
+	};
+
+	// specialize vector for batched bind
+	template <>
+	class TypeHandler< list< Blob > >
+	{
+	public:
+		static void bind(std::size_t pos, const list< Blob >& obj, AbstractBinder* pBinder)
+		{
+			throw BindException( "can't bind empty blob list, use empty_blob() instead!" );
+		}
+
+		static std::size_t size()
+		{
+			return TypeHandler< Blob >::size();
+		}
+
+		static void extract(std::size_t pos, AbstractExtractor* pExt)
+		{
+			size_t nCharBufMax = sizeof( oracle::occi::Blob );
+			assert( pExt != 0 );
+			size_t nAllBufLength = nCharBufMax * nBatchedRetrieveOnceCount;
+			// set buffer
+			oracle::occi::Blob* pBlob = ( oracle::occi::Blob* )malloc( nAllBufLength );
+			memset( pBlob, 0, nAllBufLength );
+			char* p = ( char* )pBlob;
+			// set length array
+			UInt16* p_length = ( UInt16* )malloc( sizeof( UInt16 ) * nBatchedRetrieveOnceCount );
+			// set indicator
+			Int16* p_Ind = ( Int16* )malloc( sizeof( Int16 ) * nBatchedRetrieveOnceCount );
+			pExt->Extract( pos, p, nCharBufMax, p_length, p_Ind, TypeConvertor< Blob >::Convert() );
+		}
+
+		static void fetch( std::size_t pos, list< Blob >& lResult, AbstractExtractor* pExtractor, vector< shared_ptr< OcciDataBuffer > >& vDataBuf, size_t nFetchedNum )
+		{
+			assert( vDataBuf.size() == 1 );
+			shared_ptr< OcciDataBuffer > pDataBuf = vDataBuf[ 0 ];
+			for( size_t i = 0; i < nFetchedNum; ++ i )
+			{
+				Blob obj = TypeConvertor< Blob >::retrieve( ( ( void* )( ( char* )pDataBuf->m_pBuffer + pDataBuf->m_nDataBufMaxPerLength * i ) ) , *( pDataBuf->m_pDataLength + i ), *( pDataBuf->m_pInd + i ) );
+				lResult.push_back( obj );
+			}
+		}
+
+	private:
+		TypeHandler();
+		~TypeHandler();
+		TypeHandler(const TypeHandler&);
+		TypeHandler& operator = (const TypeHandler&);
+	};
+
+	// specialize vector for batched bind
+	template <>
+	class TypeHandler< list< Clob > >
+	{
+	public:
+		static void bind(std::size_t pos, const list< Clob >& obj, AbstractBinder* pBinder)
+		{
+			throw BindException( "can't bind empty clob list, use empty_clob() instead!" );
+		}
+
+		static std::size_t size()
+		{
+			return TypeHandler< Clob >::size();
+		}
+
+		static void extract(std::size_t pos, AbstractExtractor* pExt)
+		{
+			size_t nCharBufMax = sizeof( oracle::occi::Clob );
+			assert( pExt != 0 );
+			size_t nAllBufLength = nCharBufMax * nBatchedRetrieveOnceCount;
+			// set buffer
+			oracle::occi::Clob* pClob = ( oracle::occi::Clob* )malloc( nAllBufLength );
+			memset( pClob, 0, nAllBufLength );
+			char* p = ( char* )pClob;
+			// set length array
+			UInt16* p_length = ( UInt16* )malloc( sizeof( UInt16 ) * nBatchedRetrieveOnceCount );
+			// set indicator
+			Int16* p_Ind = ( Int16* )malloc( sizeof( Int16 ) * nBatchedRetrieveOnceCount );
+			pExt->Extract( pos, p, nCharBufMax, p_length, p_Ind, TypeConvertor< Clob >::Convert() );
+		}
+
+		static void fetch( std::size_t pos, list< Clob >& lResult, AbstractExtractor* pExtractor, vector< shared_ptr< OcciDataBuffer > >& vDataBuf, size_t nFetchedNum )
+		{
+			assert( vDataBuf.size() == 1 );
+			shared_ptr< OcciDataBuffer > pDataBuf = vDataBuf[ 0 ];
+			for( size_t i = 0; i < nFetchedNum; ++ i )
+			{
+				Clob obj = TypeConvertor< Clob >::retrieve( ( ( void* )( ( char* )pDataBuf->m_pBuffer + pDataBuf->m_nDataBufMaxPerLength * i ) ) , *( pDataBuf->m_pDataLength + i ), *( pDataBuf->m_pInd + i ) );
+				lResult.push_back( obj );
 			}
 		}
 
@@ -3125,5 +3490,6 @@ namespace occiwrapper
 		TypeHandler& operator = (const TypeHandler&);
 	};
 }
+
 
 

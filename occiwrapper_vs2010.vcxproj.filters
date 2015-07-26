@@ -13,20 +13,8 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Common">
-      <UniqueIdentifier>{a586c971-6b67-4f0d-a11a-ff8bb03b67ca}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="OcciWrapper.h">
-      <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Type.h">
-      <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Common.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="include\occiwrapper\AbstractBinder.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -93,6 +81,27 @@
     <ClInclude Include="include\occiwrapper\TypeHandler.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="include\OcciWrapper\BinaryReader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\OcciWrapper\BinaryWriter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\OcciWrapper\ByteOrder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\OcciWrapper\BlobStream.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\OcciWrapper\UnbufferedStreamBuf.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\OcciWrapper\LobBase.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\OcciWrapper\Lob.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AbstractBinder.cpp">
@@ -138,6 +147,21 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="StatementImpl.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BinaryReader.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BinaryWriter.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BlobStream.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="LobBase.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Lob.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

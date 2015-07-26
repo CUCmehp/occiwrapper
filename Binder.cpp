@@ -1,8 +1,10 @@
 #include "OcciWrapper/Binder.h"
+#include <memory.h>
 
-occiwrapper::Binder::Binder( oracle::occi::Statement* pOcciStat, oracle::occi::Environment* pEnv )
+occiwrapper::Binder::Binder( oracle::occi::Statement* pOcciStat, oracle::occi::Environment* pEnv, oracle::occi::Connection* pOcciConn )
 : m_pOcciStat( pOcciStat )
 , m_pEnv( pEnv )
+, m_pOcciConn( pOcciConn )
 {
 	this->m_bBindStart = false;
 	this->m_vBindArray.clear();
@@ -594,7 +596,7 @@ void occiwrapper::Binder::Retrieve( std::size_t nPos, string& val )
 	}
 	catch( ... )
 	{
-		throw UnknownException( "unknown exception occurs, when bind string" );
+		throw UnknownException( "unknown exception occurs, when retrieve string" );
 	}
 }
 
@@ -617,7 +619,7 @@ void occiwrapper::Binder::Bind( std::size_t nPos, const struct tm& val )
 	}
 	catch( ... )
 	{
-		throw UnknownException( "unknown exception occurs, when bind string" );
+		throw UnknownException( "unknown exception occurs, when bind tm" );
 	}
 }
 
@@ -638,7 +640,133 @@ void occiwrapper::Binder::Retrieve( std::size_t nPos, struct tm& val )
 	}
 	catch( ... )
 	{
-		throw UnknownException( "unknown exception occurs, when bind string" );
+		throw UnknownException( "unknown exception occurs, when retrieve tm" );
+	}
+}
+
+void occiwrapper::Binder::Bind( std::size_t nPos, const Blob& blob )
+{
+	try
+	{
+		if( this->IsIn() )
+		{
+			if( blob.size() != 0 )
+			{
+				throw BindException( "binding blob to statement, but blob is not null!" );
+			}
+			oracle::occi::Blob _blob;
+			_blob.setEmpty( m_pOcciConn );
+			m_pOcciStat->setBlob( nPos, _blob );
+		} 
+		if( this->IsOut() )
+		{
+			m_pOcciStat->registerOutParam( nPos, oracle::occi::OCCIBLOB );
+		}
+	}
+	catch( BindException& exc )
+	{
+		throw exc;
+	}
+	catch( oracle::occi::SQLException& exc )
+	{
+		throw BindException( exc.what() );
+	}
+	catch( ... )
+	{
+		throw UnknownException( "unknown exception occurs, when bind blob" );
+	}
+}
+
+void occiwrapper::Binder::Retrieve( std::size_t nPos, Blob& val )
+{
+	if( !this->IsOut() )
+	{
+		throw BindException( "variable direction in can not retrieve value!" );
+	}
+	try
+	{
+		oracle::occi::Blob tmp = m_pOcciStat->getBlob( nPos );
+		unsigned char strBuf[ 10240 ];
+		memset( strBuf, 0, 10240 );
+
+		unsigned int nOffset = 1;
+		unsigned int nRet = 0;
+		while( ( nRet = tmp.read( 10240, strBuf, 10240, nOffset ) ) > 0  )
+		{
+			nOffset += nRet;
+			val.AppendRaw( ( char* )strBuf, nRet );
+		}
+	}
+	catch( oracle::occi::SQLException& exc )
+	{
+		throw BindException( exc.what() );
+	}
+	catch( ... )
+	{
+		throw UnknownException( "unknown exception occurs, when retrieve blob" );
+	}
+}
+
+void occiwrapper::Binder::Bind(std::size_t nPos, const Clob& clob )
+{
+	try
+	{
+		if( this->IsIn() )
+		{
+			if( clob.size() != 0 )
+			{
+				throw BindException( "binding clob to statement, but clob is not null!" );
+			}
+			oracle::occi::Clob _clob;
+			_clob.setEmpty( m_pOcciConn );
+			m_pOcciStat->setClob( nPos, _clob );
+		} 
+		if( this->IsOut() )
+		{
+			m_pOcciStat->registerOutParam( nPos, oracle::occi::OCCICLOB );
+		}
+	}
+	catch( BindException& exc )
+	{
+		throw exc;
+	}
+	catch( oracle::occi::SQLException& exc )
+	{
+		throw BindException( exc.what() );
+	}
+	catch( ... )
+	{
+		throw UnknownException( "unknown exception occurs, when bind clob" );
+	}
+}
+
+void occiwrapper::Binder::Retrieve(std::size_t nPos, Clob& val)
+{
+	if( !this->IsOut() )
+	{
+		throw BindException( "variable direction in can not retrieve value!" );
+	}
+	try
+	{
+		oracle::occi::Clob tmp = m_pOcciStat->getClob( nPos );
+		unsigned char strBuf[ 10240 ];
+		memset( strBuf, 0, 10240 );
+
+		unsigned int nOffset = 1;
+		unsigned int nRet = 0;
+		while( ( nRet = tmp.read( 10240, strBuf, 10240, nOffset ) ) > 0  )
+		{
+			nOffset += nRet;
+			val.AppendRaw( ( char* )strBuf, nRet );
+		}
+	}
+	catch( oracle::occi::SQLException& exc )
+	{
+		throw BindException( exc.what() );
+	}
+	catch( ... )
+	{
+		throw UnknownException( "unknown exception occurs, when retrieve clob" );
 	}
 }
 
@@ -661,9 +789,11 @@ void occiwrapper::Binder::Retrieve( std::size_t nPos, const char* const& val )
 	throw BindException( "can not retrieve to a const char array!");
 }
 
+
+
 void occiwrapper::Binder::BatchedBind( std::size_t pos, void* p_buf, const size_t each_buf_length, UInt16* p_length, Int16* p_Ind, enum oracle::occi::Type type )
 {
-	this->m_vBindArray.push_back( shared_ptr< OcciDataBuffer >( new OcciDataBuffer( p_buf, p_length, p_Ind, each_buf_length ) ) );
+	this->m_vBindArray.push_back( shared_ptr< OcciDataBuffer >( new OcciDataBuffer( p_buf, p_length, p_Ind, each_buf_length, type ) ) );
 	const std::size_t _index = m_vBindArray.size() - 1;
 	try
 	{
@@ -677,4 +807,9 @@ void occiwrapper::Binder::BatchedBind( std::size_t pos, void* p_buf, const size_
 	{
 		throw UnknownException( "unknown exception occurs, when bind string" );
 	}
+}
+
+oracle::occi::Connection* occiwrapper::Binder::GetOcciConn()
+{
+	return m_pOcciConn;
 }

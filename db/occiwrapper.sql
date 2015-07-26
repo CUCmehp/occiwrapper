@@ -1,7 +1,7 @@
-------------------------------------------
--- Export file for user OCCIWRAPPER     --
--- Created by hup on 2012-8-6, 23:21:15 --
-------------------------------------------
+-----------------------------------------------------
+-- Export file for user OCCIWRAPPER                --
+-- Created by Administrator on 2015/7/26, 11:43:33 --
+-----------------------------------------------------
 
 spool occiwrapper.log
 
@@ -17,7 +17,17 @@ create table OCCIWRAPPER.LOG_F_TEST4
   P_IN_VALUE4 FLOAT,
   P_IN_VALUE5 NUMBER(22,8)
 )
-;
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
 
 prompt
 prompt Creating table TBL_TEST1
@@ -27,7 +37,17 @@ create table OCCIWRAPPER.TBL_TEST1
 (
   X INTEGER
 )
-;
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
 
 prompt
 prompt Creating table TBL_TEST2
@@ -38,7 +58,17 @@ create table OCCIWRAPPER.TBL_TEST2
   X INTEGER,
   Y INTEGER
 )
-;
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
 
 prompt
 prompt Creating table TEST_BATCHED_TABLE
@@ -52,7 +82,99 @@ create table OCCIWRAPPER.TEST_BATCHED_TABLE
   INT_VALUE    INTEGER,
   NUMBER_VALUE NUMBER
 )
-;
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+
+prompt
+prompt Creating table TEST_BLOB
+prompt ========================
+prompt
+create table OCCIWRAPPER.TEST_BLOB
+(
+  OBJS BLOB
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+
+prompt
+prompt Creating table TEST_BLOB_WITH_ID
+prompt ================================
+prompt
+create table OCCIWRAPPER.TEST_BLOB_WITH_ID
+(
+  ID   INTEGER,
+  OBJS BLOB
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+
+prompt
+prompt Creating table TEST_CLOB
+prompt ========================
+prompt
+create table OCCIWRAPPER.TEST_CLOB
+(
+  OBJS CLOB
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+
+prompt
+prompt Creating table TEST_CLOB_WITH_ID
+prompt ================================
+prompt
+create table OCCIWRAPPER.TEST_CLOB_WITH_ID
+(
+  ID   INTEGER,
+  OBJS CLOB
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
 
 prompt
 prompt Creating table TEST_DATE
@@ -62,7 +184,17 @@ create table OCCIWRAPPER.TEST_DATE
 (
   DATE_VAL DATE not null
 )
-;
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
 
 prompt
 prompt Creating table TEST_NUMBER
@@ -73,7 +205,17 @@ create table OCCIWRAPPER.TEST_NUMBER
   ID           INTEGER not null,
   NUMBER_VALUE NUMBER
 )
-;
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
 
 prompt
 prompt Creating table TEST_STRING
@@ -84,7 +226,17 @@ create table OCCIWRAPPER.TEST_STRING
   ID         INTEGER not null,
   STRING_VAL VARCHAR2(100)
 )
-;
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
 
 prompt
 prompt Creating function F_INS_TBL_TEST1
@@ -153,7 +305,7 @@ create or replace function occiwrapper.f_test4(
          p_in_value4 in float,
          p_in_value5 in number,
          p_out_msg   out varchar2)
-return number 
+return number
 is
   v_log_count   number;
   v_sql         varchar2( 32767 );
@@ -169,8 +321,8 @@ begin
   end if;
   v_sql := 'insert into log_f_test4(p_in_value1, p_in_value2, p_in_value3, p_in_value4, p_in_value5) values '
              || '(' || p_in_value1 || ',''' || p_in_value2 || ''', to_date(''' ||  to_char( p_in_value3, 'yyyymmdd hh24:mi:ss') || ''',''yyyymmdd hh24:mi:ss''),' || p_in_value4 || ',' || p_in_value5 || ')';
-  execute immediate v_sql;        
-  commit;     
+  execute immediate v_sql;
+  commit;
   return 1;
 exception
   when others then
@@ -178,6 +330,36 @@ exception
   rollback;
   return -1;
 end;
+/
+
+prompt
+prompt Creating procedure P_TEST_BLOB_PROCEDURE
+prompt ========================================
+prompt
+CREATE OR REPLACE PROCEDURE OCCIWRAPPER.P_TEST_BLOB_PROCEDURE(
+       P_OUT_BLOB      OUT  BLOB
+       ) IS
+BEGIN
+     select to_blob( '48656C6C6520576F726C642047' ) into P_OUT_BLOB from dual;
+EXCEPTION
+  WHEN OTHERS THEN
+    RETURN;
+END P_TEST_BLOB_PROCEDURE;
+/
+
+prompt
+prompt Creating procedure P_TEST_CLOB_PROCEDURE
+prompt ========================================
+prompt
+CREATE OR REPLACE PROCEDURE OCCIWRAPPER.P_TEST_CLOB_PROCEDURE(
+       P_OUT_CLOB      OUT  CLOB
+       ) IS
+BEGIN
+     select to_clob( 'Helle World G' ) into P_OUT_CLOB from dual;
+EXCEPTION
+  WHEN OTHERS THEN
+    RETURN;
+END P_TEST_CLOB_PROCEDURE;
 /
 
 prompt

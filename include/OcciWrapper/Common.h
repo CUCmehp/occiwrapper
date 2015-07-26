@@ -7,6 +7,9 @@
 #include <iterator>
 using namespace std;
 
+//#define ARCH_BIG_ENDIAN
+#define ARCH_LITTLE_ENDIAN
+
 #if defined(WIN32)
 #include <memory>
 #include <tuple>
@@ -58,7 +61,7 @@ namespace occiwrapper
 		/***
 		*	@brief: OcciDataBuffer construction
 		*/
-		OcciDataBuffer( void* pBuffer, UInt16* pDataLength, Int16* pInd, Int32 nDataBufMaxPerLength );
+		OcciDataBuffer( void* pBuffer, UInt16* pDataLength, Int16* pInd, Int32 nDataBufMaxPerLength, oracle::occi::Type type );
 
 
 		/***
@@ -78,6 +81,11 @@ namespace occiwrapper
 
 		// max per length
 		Int32 m_nDataBufMaxPerLength;
+
+		/***
+		*	@brief: 
+		*/
+		oracle::occi::Type m_eType;
 
 	private:
 		/***

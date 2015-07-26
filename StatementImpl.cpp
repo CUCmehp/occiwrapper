@@ -16,8 +16,8 @@ occiwrapper::StatementImpl::StatementImpl( oracle::occi::Statement* pOcciStat, s
 	this->m_pOcciStat = pOcciStat;
 	this->m_pOcciResult = NULL;
 	this->m_pConnection = pConn;
-	this->m_objBinder = new occiwrapper::Binder( this->m_pOcciStat, pConn->GetEnvirnment() );
-	this->m_pExtrator = new occiwrapper::Extractor( pConn->GetEnvirnment() );
+	this->m_objBinder = new occiwrapper::Binder( this->m_pOcciStat, pConn->GetEnvirnment(), pConn->GetOcciConnection() );
+	this->m_pExtrator = new occiwrapper::Extractor( pConn->GetEnvirnment(), pConn->GetOcciConnection() );
 }
 
 occiwrapper::StatementImpl::~StatementImpl()
@@ -141,11 +141,6 @@ bool occiwrapper::StatementImpl::Execute()
 
 bool occiwrapper::StatementImpl::GetSuccessed()
 {
-	//if( this->m_eState == ST_DONE )
-	//{
-	//	return m_bSuccessed;
-	//}
-	//return false;
 	return m_bSuccessed;
 }
 
@@ -272,9 +267,17 @@ void occiwrapper::StatementImpl::Fetch()
 void occiwrapper::StatementImpl::FetchImpl()
 {
 	vector< shared_ptr< OcciDataBuffer > >& pVecDataBufs = this->m_pExtrator->GetExatractDataBuffers();
+	UInt32 nTmpBatchedRetrieveOnceCount = nBatchedRetrieveOnceCount;
+	for( size_t i = 0; i < pVecDataBufs.size(); ++ i )
+	{
+		if( pVecDataBufs[ i ]->m_eType == oracle::occi::OCCI_SQLT_BLOB || pVecDataBufs[ i ]->m_eType == oracle::occi::OCCI_SQLT_CLOB )
+		{
+			nTmpBatchedRetrieveOnceCount = 1;		// for blob and clob, it can only call next(1)
+		}
+	}
 	try
 	{
-		UInt32 nNextBatchedCount = nBatchedRetrieveOnceCount < m_objLimit.value() ? nBatchedRetrieveOnceCount : m_objLimit.value();
+		UInt32 nNextBatchedCount = nTmpBatchedRetrieveOnceCount < m_objLimit.value() ? nTmpBatchedRetrieveOnceCount : m_objLimit.value();
 		UInt32 nTotalBatchedCount = 0;
 		oracle::occi::ResultSet::Status eState = oracle::occi::ResultSet::DATA_AVAILABLE;
 		while( ( eState = this->m_pOcciResult->next( nNextBatchedCount ) ) != oracle::occi::ResultSet::END_OF_FETCH )
@@ -288,13 +291,13 @@ void occiwrapper::StatementImpl::FetchImpl()
 			}
 			nTotalBatchedCount += nRowFetched;
 
-			if( nTotalBatchedCount + nBatchedRetrieveOnceCount > this->m_objLimit.value() )
+			if( nTotalBatchedCount + nTmpBatchedRetrieveOnceCount > this->m_objLimit.value() )
 			{
 				nNextBatchedCount = this->m_objLimit.value() - nTotalBatchedCount;
 			}
 			else
 			{
-				nNextBatchedCount = nBatchedRetrieveOnceCount;
+				nNextBatchedCount = nTmpBatchedRetrieveOnceCount;
 			}
 
 			// if has get enough data, then break

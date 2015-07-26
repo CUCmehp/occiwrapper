@@ -1,4 +1,5 @@
 #pragma once
+
 #include "OcciWrapper/Common.h"
 #include "OcciWrapper/AbstractExtractor.h"
 #include "OcciWrapper/StatementImpl.h"
@@ -17,7 +18,7 @@ namespace occiwrapper
 		/***
 		*	@brief: Creates the Extractor.
 		*/
-		Extractor( oracle::occi::Environment* pOcciEnv );
+		Extractor( oracle::occi::Environment* pOcciEnv, oracle::occi::Connection* pOcciConn );
 		
 		/***
 		*	@brief: Destroys the Extractor.
@@ -66,6 +67,9 @@ namespace occiwrapper
 
 		// oracle environment
 		oracle::occi::Environment* m_pOcciEnv;
+
+		// oracle connection
+		oracle::occi::Connection* m_pOcciConn;
 
 		// data buffer for extraction
 		std::vector< shared_ptr< OcciDataBuffer > > m_vExtractVecDataBuf;

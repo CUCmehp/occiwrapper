@@ -58,11 +58,12 @@ struct tm occiwrapper::GetTm( const oracle::occi::Date& date )
 	return temp;
 }
 
-occiwrapper::OcciDataBuffer::OcciDataBuffer( void* pBuffer, UInt16* pDataLength, Int16* pInd, Int32 nDataBufMaxPerLength  )
+occiwrapper::OcciDataBuffer::OcciDataBuffer( void* pBuffer, UInt16* pDataLength, Int16* pInd, Int32 nDataBufMaxPerLength, oracle::occi::Type type )
 : m_pBuffer( pBuffer )
 , m_pDataLength( pDataLength )
 , m_nDataBufMaxPerLength( nDataBufMaxPerLength )
 , m_pInd( pInd )
+, m_eType( type )
 {
 
 }

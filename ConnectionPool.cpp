@@ -2,9 +2,9 @@
 #include "OcciWrapper/Common.h"
 #include <iostream>
 
-occiwrapper::ConnectionPool::ConnectionPool()
+occiwrapper::ConnectionPool::ConnectionPool( string strCharset, string strNCharset )
 {
-	m_pEnviroment = shared_ptr< occiwrapper::Environment >( occiwrapper::Environment::CreateEnvironment() );
+	m_pEnviroment = shared_ptr< occiwrapper::Environment >( occiwrapper::Environment::CreateEnvironment( strCharset, strNCharset ) );
 }
 
 occiwrapper::ConnectionPool::~ConnectionPool()

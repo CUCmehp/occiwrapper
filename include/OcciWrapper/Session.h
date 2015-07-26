@@ -1,4 +1,5 @@
 #pragma once
+
 #include "OcciWrapper/Common.h"
 #include "OcciWrapper/Connection.h"
 #include "OcciWrapper/ConnectionInfo.h"

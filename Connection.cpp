@@ -178,3 +178,8 @@ occiwrapper::Connection::Connection( shared_ptr< occiwrapper::Environment >& pPa
 	}
 }
 
+oracle::occi::Connection* occiwrapper::Connection::GetOcciConnection()
+{
+	return m_pOcciConnection;
+}
+

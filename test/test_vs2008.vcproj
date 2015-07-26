@@ -190,6 +190,18 @@
 				>
 			</File>
 			<File
+				RelativePath=".\TestBlob.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\TestByteOrder.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\TestClob.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\TestConnection.cpp"
 				>
 			</File>
@@ -199,6 +211,10 @@
 			</File>
 			<File
 				RelativePath=".\TestEnviroment.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\TestObj.cpp"
 				>
 			</File>
 			<File
@@ -228,6 +244,18 @@
 				>
 			</File>
 			<File
+				RelativePath=".\TestBlob.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TestByteOrder.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TestClob.h"
+				>
+			</File>
+			<File
 				RelativePath=".\TestConnection.h"
 				>
 			</File>
@@ -237,6 +265,10 @@
 			</File>
 			<File
 				RelativePath=".\TestEnviroment.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TestObj.h"
 				>
 			</File>
 			<File
@@ -253,6 +285,14 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
+			<File
+				RelativePath="..\db\create_user.sql"
+				>
+			</File>
+			<File
+				RelativePath="..\db\occiwrapper.sql"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="occi_wrapper"

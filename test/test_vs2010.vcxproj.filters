@@ -39,6 +39,18 @@
     <ClCompile Include="TestTuple.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="TestObj.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TestBlob.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TestByteOrder.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TestClob.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DbConfig.h">
@@ -65,5 +77,23 @@
     <ClInclude Include="TestTuple.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="TestObj.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TestBlob.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TestByteOrder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TestClob.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="db_config.ini">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="test_vs2010.vcxproj.user" />
   </ItemGroup>
 </Project>

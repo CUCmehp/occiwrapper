@@ -88,13 +88,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Common.h" />
     <ClInclude Include="include\occiwrapper\AbstractBinder.h" />
     <ClInclude Include="include\occiwrapper\AbstractBinding.h" />
     <ClInclude Include="include\occiwrapper\AbstractExtraction.h" />
     <ClInclude Include="include\occiwrapper\AbstractExtractor.h" />
+    <ClInclude Include="include\OcciWrapper\BinaryReader.h" />
+    <ClInclude Include="include\OcciWrapper\BinaryWriter.h" />
     <ClInclude Include="include\occiwrapper\Binder.h" />
     <ClInclude Include="include\occiwrapper\Binding.h" />
+    <ClInclude Include="include\OcciWrapper\Lob.h" />
+    <ClInclude Include="include\OcciWrapper\LobBase.h" />
+    <ClInclude Include="include\OcciWrapper\BlobStream.h" />
+    <ClInclude Include="include\OcciWrapper\ByteOrder.h" />
     <ClInclude Include="include\occiwrapper\Common.h" />
     <ClInclude Include="include\occiwrapper\Connection.h" />
     <ClInclude Include="include\occiwrapper\ConnectionInfo.h" />
@@ -111,14 +116,18 @@
     <ClInclude Include="include\occiwrapper\StatementImpl.h" />
     <ClInclude Include="include\occiwrapper\Type.h" />
     <ClInclude Include="include\occiwrapper\TypeHandler.h" />
-    <ClInclude Include="OcciWrapper.h" />
-    <ClInclude Include="Type.h" />
+    <ClInclude Include="include\OcciWrapper\UnbufferedStreamBuf.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AbstractBinder.cpp" />
     <ClCompile Include="AbstractBinding.cpp" />
     <ClCompile Include="AbstractExtraction.cpp" />
+    <ClCompile Include="BinaryReader.cpp" />
+    <ClCompile Include="BinaryWriter.cpp" />
     <ClCompile Include="Binder.cpp" />
+    <ClCompile Include="Lob.cpp" />
+    <ClCompile Include="LobBase.cpp" />
+    <ClCompile Include="BlobStream.cpp" />
     <ClCompile Include="Common.cpp" />
     <ClCompile Include="Connection.cpp" />
     <ClCompile Include="ConnectionInfo.cpp" />

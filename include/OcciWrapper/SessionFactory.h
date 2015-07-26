@@ -2,6 +2,9 @@
 #include "OcciWrapper/ConnectionInfo.h"
 #include "OcciWrapper/ConnectionPool.h"
 #include "OcciWrapper/Session.h"
+#include <string>
+
+using namespace std;
 
 namespace occiwrapper
 {
@@ -21,7 +24,7 @@ namespace occiwrapper
 		*/
 		Session Create( const ConnectionInfo& connInfo, bool bAutoCommit = true );
 
-		SessionFactory();
+		SessionFactory( string strCharset = "", string strNCharset = "" );
 		~SessionFactory();
 	private:
 
@@ -30,5 +33,7 @@ namespace occiwrapper
 
 	private:
 		ConnectionPool					m_objConnectionPool;
+		string							m_strCharset;
+		string							m_strNCharset;
 	};
 }

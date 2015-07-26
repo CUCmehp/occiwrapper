@@ -182,7 +182,23 @@
 				>
 			</File>
 			<File
+				RelativePath=".\BinaryReader.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\BinaryWriter.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Binder.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\BlobStream.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ByteOrder.cpp"
 				>
 			</File>
 			<File
@@ -211,6 +227,14 @@
 			</File>
 			<File
 				RelativePath=".\Limit.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Lob.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LobBase.cpp"
 				>
 			</File>
 			<File
@@ -252,11 +276,27 @@
 				>
 			</File>
 			<File
+				RelativePath=".\include\OcciWrapper\BinaryReader.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\OcciWrapper\BinaryWriter.h"
+				>
+			</File>
+			<File
 				RelativePath=".\include\OcciWrapper\Binder.h"
 				>
 			</File>
 			<File
 				RelativePath=".\include\OcciWrapper\Binding.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\OcciWrapper\BlobStream.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\OcciWrapper\ByteOrder.h"
 				>
 			</File>
 			<File
@@ -296,6 +336,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\include\OcciWrapper\Lob.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\OcciWrapper\LobBase.h"
+				>
+			</File>
+			<File
 				RelativePath=".\include\OcciWrapper\OcciWrapper.h"
 				>
 			</File>
@@ -321,6 +369,10 @@
 			</File>
 			<File
 				RelativePath=".\include\OcciWrapper\TypeHandler.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\OcciWrapper\UnbufferedStreamBuf.h"
 				>
 			</File>
 		</Filter>

@@ -21,7 +21,7 @@ namespace occiwrapper
 		*	@brief: create a connection pool
 		*	@add by CUCmehp
 		*/
-		ConnectionPool();
+		ConnectionPool( string strCharset = "", string strNCharset = "" );
 
 		/***
 		*	@brief: destroyed connection pool

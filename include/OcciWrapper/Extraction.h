@@ -55,8 +55,6 @@ namespace occiwrapper {
 
 	private:
 		T&   m_objResult;
-		//T    m_objDefault;   // copy the default
-		//bool _extracted;
 	};
 
 	/***
@@ -69,13 +67,8 @@ namespace occiwrapper {
 	public:
 		Extraction(std::vector<T>& vResult ) 
 			: m_vResult( vResult )
-			//, m_objDefault()
 		{
 		}
-
-		//Extraction(std::vector<T>& vResult, const T& def): m_vResult( vResult ), m_objDefault( def )
-		//{
-		//}
 
 		virtual ~Extraction()
 		{
@@ -90,7 +83,6 @@ namespace occiwrapper {
 		{
 			AbstractExtractor* pExtractor = GetExtractor();
 			assert( pExtractor != NULL );
-			//TypeHandler< std::vector<T> >::extract( nPos, m_vResult, pExtractor );
 			TypeHandler< std::vector<T> >::extract( nPos, pExtractor );
 		}
 
@@ -102,7 +94,6 @@ namespace occiwrapper {
 		{
 			AbstractExtractor* pExtractor = GetExtractor();
 			assert( pExtractor != NULL );
-			//shared_ptr< OcciDataBuffer > pDataBuf = pExtractor->GetExatractDataBuffer( nPos );
 			vector< shared_ptr< OcciDataBuffer > > vDataBuf;
 			for( size_t i = 0; i < TypeHandler< std::vector< T > >::size(); ++ i )
 			{
@@ -113,7 +104,6 @@ namespace occiwrapper {
 
 	private:
 		std::vector< T >&		m_vResult;
-		//T						m_objDefault; // copy the default
 	};
 
 

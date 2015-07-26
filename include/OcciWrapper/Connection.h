@@ -92,6 +92,11 @@ namespace occiwrapper
 		*/
 		string GetErrMsg();
 
+		/***
+		*	@brief: get occi connection
+		*/
+		oracle::occi::Connection* GetOcciConnection();
+
 	private:
 		/***
 		*	@brief: create a connection.

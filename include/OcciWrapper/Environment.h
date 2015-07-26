@@ -15,7 +15,7 @@ namespace occiwrapper
 		/***
 		*	@brief: factory funciton to create Environment
 		*/
-		static shared_ptr< Environment > CreateEnvironment();
+		static shared_ptr< Environment > CreateEnvironment( string strCharSet = "", string strNCharSet = "" );
 
 		/***
 		*	@brief: destory Environment
@@ -31,7 +31,7 @@ namespace occiwrapper
 		/***
 		*	@brief: create Environment
 		*/
-		Environment();
+		Environment( string strCharSet, string strNCharSet );
 
 	private:
 		oracle::occi::Environment*	m_pOcciEnviroment;

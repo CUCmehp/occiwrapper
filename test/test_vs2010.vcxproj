@@ -14,9 +14,13 @@
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="DbConfig.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="TestBlob.cpp" />
+    <ClCompile Include="TestByteOrder.cpp" />
+    <ClCompile Include="TestClob.cpp" />
     <ClCompile Include="TestConnection.cpp" />
     <ClCompile Include="TestConnectionPool.cpp" />
     <ClCompile Include="TestEnviroment.cpp" />
+    <ClCompile Include="TestObj.cpp" />
     <ClCompile Include="TestSessionFactory.cpp" />
     <ClCompile Include="TestTuple.cpp" />
   </ItemGroup>
@@ -24,11 +28,19 @@
     <ClInclude Include="Config.h" />
     <ClInclude Include="DbConfig.h" />
     <ClInclude Include="Test.h" />
+    <ClInclude Include="TestBlob.h" />
+    <ClInclude Include="TestByteOrder.h" />
+    <ClInclude Include="TestClob.h" />
     <ClInclude Include="TestConnection.h" />
     <ClInclude Include="TestConnectionPool.h" />
     <ClInclude Include="TestEnviroment.h" />
+    <ClInclude Include="TestObj.h" />
     <ClInclude Include="TestSessionFactory.h" />
     <ClInclude Include="TestTuple.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="db_config.ini" />
+    <None Include="test_vs2010.vcxproj.user" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{56C223D8-2DD9-4942-8844-88A44CABC547}</ProjectGuid>
