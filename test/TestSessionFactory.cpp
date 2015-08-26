@@ -537,6 +537,88 @@ void TestSelectWithLimit()
 	assert( nMaxNumber == 24);
 }
 
+
+//test statement
+void TestStatement()
+{
+	test_db_config::DbConfig config;
+	bool bRet = config.Init();
+	assert( bRet == true );
+	occiwrapper::ConnectionInfo info( config.GetStrIp(), 1521, config.GetUserName(), config.GetPassword(), config.GetSid() );
+	occiwrapper::SessionFactory sf;
+	occiwrapper::Session s = sf.Create( info );
+	string strErrMsg = "";
+
+	tuple< int, tuple< int > > a[5] = { make_tuple( 20, make_tuple( 30 ) ), make_tuple( 21, make_tuple( 31 ) ), make_tuple( 22, make_tuple( 32 ) ), make_tuple( 23, make_tuple( 33 ) ), make_tuple( 24, make_tuple( 34 ) ) };
+	vector< tuple< int, tuple< int > > > vec( a, a + 5 );
+
+	occiwrapper::Statement stat1 = s << "truncate table tbl_test2";
+	bRet = stat1.Execute();
+	strErrMsg = stat1.GetErrMsg();
+	assert( bRet );
+	assert( strErrMsg.empty() );
+
+	occiwrapper::Statement stat2 = s << "insert into tbl_test2( x, y ) values ( :1, :2 )";
+	stat2.AddBinding( batched_use( vec ) );
+	bRet = stat2.Execute();
+	strErrMsg = stat2.GetErrMsg();
+	assert( bRet );
+	assert( strErrMsg.empty() );
+
+	occiwrapper::Statement stat3 = s << "insert into no_exists_test2( x, y ) values ( :1, :2 )";
+	stat3.AddBinding( batched_use( vec ) );
+	bRet = stat3.Execute();
+	strErrMsg = stat3.GetErrMsg();
+	assert( bRet == false );
+	assert( !strErrMsg.empty() );
+
+	vector< int > vec1;
+	vector< int > vec2;
+	// test limit select
+	occiwrapper::Statement stat4 = s << "select * from tbl_test2 t";
+	stat4.AddExtract( into( vec1 ) );
+	stat4.AddExtract( into( vec2 ) );
+	stat4.SetExtractionLimit( limit( 3 ) );
+	bRet = stat4.Execute();
+	assert( stat4.GetErrMsg().empty() );
+	assert( vec1.size() == 3 );
+	assert( vec2.size() == 3 );
+	vec1.clear();
+	vec2.clear();
+
+	// stupid test, for zero limit no crashing.
+	occiwrapper::Statement stat5 = s << "select * from tbl_test2 t";
+	stat5.AddExtract( into( vec1 ) );
+	stat5.AddExtract( into( vec2 ) );
+	stat5.SetExtractionLimit( limit( 0 ) );
+	bRet = stat5.Execute();
+	assert( bRet );
+	assert( stat5.GetErrMsg().empty() );
+	assert( vec1.size() == 0 );
+	assert( vec2.size() == 0 );
+	vec1.clear();
+	vec2.clear();
+
+	// test unlimit select
+	occiwrapper::Statement stat6 = s << "select * from tbl_test2 t";
+	stat6.AddExtract( into( vec1 ) );
+	stat6.AddExtract( into( vec2 ) );
+	bRet = stat6.Execute();
+	assert( bRet );
+	assert( stat6.GetErrMsg().empty() );
+	assert( vec1.size() == 5 );
+	assert( vec2.size() == 5 );
+
+	//test: select multiply value, but only first value into the number
+	int nMaxNumber;
+	occiwrapper::Statement stat7 = s << "select x from tbl_test2 order by x desc";
+	stat7.AddExtract( into( nMaxNumber ) );
+	bRet = stat7.Execute();
+	assert( bRet );
+	assert( stat7.GetErrMsg().empty() );
+	assert( nMaxNumber == 24);
+}
+
 //test select with single step
 void TestSelectSingleStep()
 {

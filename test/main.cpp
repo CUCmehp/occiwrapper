@@ -136,6 +136,11 @@ int main( int argc, char* argv[] )
 	TestSelectWithLimit();
 	std::cout << "TestSelectWithLimit finish" << std::endl;
 
+	// test statement
+	std::cout << "start to run TestStatement:" << std::endl;
+	TestStatement();
+	std::cout << "TestStatement finish" << std::endl;
+
 	// test select with single step
 	std::cout << "start to run TestSelectSingleStep:" << std::endl;
 	TestSelectSingleStep();

@@ -2,6 +2,7 @@
 #include "DbConfig.h"
 #include "OcciWrapper/OcciWrapper.h"
 
+#pragma warning( disable : 4244 )
 
 string strCreateTable = "create table tbl_person( id varchar2(255), name varchar2(255), age int, birth_date date )";
 

@@ -6,6 +6,8 @@
 #include <string.h>
 #include <stdio.h>
 
+#pragma warning( disable : 4244 )
+
 using namespace std;
 
 

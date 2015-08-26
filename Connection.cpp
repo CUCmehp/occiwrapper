@@ -154,7 +154,7 @@ occiwrapper::Connection::Connection( shared_ptr< occiwrapper::Environment >& pPa
 	if( m_pEnviroment->m_pOcciEnviroment != NULL )
 	{
 		stringstream ss;
-		ss<< m_objConnInfo.ip << "/" << m_objConnInfo.sid << ":" << m_objConnInfo.port;
+		ss<< m_objConnInfo.ip << ":" << m_objConnInfo.port << "/" << m_objConnInfo.sid;
 		try
 		{
 			m_pOcciConnection = m_pEnviroment->m_pOcciEnviroment->createConnection( m_objConnInfo.username, m_objConnInfo.password, ss.str() );

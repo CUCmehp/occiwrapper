@@ -108,11 +108,18 @@ void TestBatchedInsertAndSelect();
 *	@add by CUCmehp, since 2014-12-10
 */
 void TestUserTableSelect();
+
 /***
 *	@brief: test select with limit
 *	@add by CUCmehp, since 2012-08-05
 */
 void TestSelectWithLimit();
+
+/***
+*	@brief: test statement
+*	@add by CUCmehp, since 2012-08-26
+*/
+void TestStatement();
 
 /***
 *	@brief: test select with single step

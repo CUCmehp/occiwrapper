@@ -3,6 +3,8 @@
 #include "DbConfig.h"
 #include "Test.h"
 
+#pragma warning( disable : 4244 )
+
 const string strCreateTable = 
 	"create table tbl_test_tuple_elements( t1 int,  "
 	"									 t2 float, "

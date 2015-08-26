@@ -35,5 +35,8 @@ tuple< int > t = make_tuple( 10 );
 (1)支持CLOB对象和BLOB对象的存取
 (2)在建立SessionFactory时，允许设置字符集
 
+5.版本1.0.5
+(1)修改port不是1521时，连接字符串错误的bug
+(2)对Statement增加GetErrMsg, AddBinding, AddExtract, SetExtractionLimit接口。
 
 

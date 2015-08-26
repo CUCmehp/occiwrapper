@@ -109,9 +109,29 @@ namespace occiwrapper
 			}
 			return *this;
 		}
+
+		// Registers the Binding at the Statement
+		Statement& AddBinding( AbstractBinding* info )
+		{
+			if( m_pImp != NULL )
+			{
+				this->m_pImp->AddBinding( shared_ptr< AbstractBinding >( info ) );
+			}
+			return *this;
+		}
 		
 		// Registers objects used for extracting data at the Statement.
 		Statement& operator , ( AbstractExtraction* extract )
+		{
+			if( m_pImp != NULL )
+			{
+				this->m_pImp->AddExtract( shared_ptr< AbstractExtraction >( extract ) );
+			}
+			return *this;
+		}
+
+		// Registers objects used for extracting data at the Statement.
+		Statement& AddExtract( AbstractExtraction* extract )
 		{
 			if( m_pImp != NULL )
 			{
@@ -124,6 +144,16 @@ namespace occiwrapper
 		// Sets a limit on the maximum number of rows a select is allowed to return.
 		// Set per default to Limit::LIMIT_UNLIMITED which disables the limit.
 		Statement& operator , (const Limit& extrLimit)
+		{
+			if( m_pImp != NULL )
+			{
+				this->m_pImp->SetExtractionLimit( extrLimit );
+			}
+			return *this;
+		}
+		// Sets a limit on the maximum number of rows a select is allowed to return.
+		// Set per default to Limit::LIMIT_UNLIMITED which disables the limit.
+		Statement& SetExtractionLimit(const Limit& extrLimit)
 		{
 			if( m_pImp != NULL )
 			{
@@ -188,7 +218,10 @@ namespace occiwrapper
 			}
 		}
 
-
+		string GetErrMsg()
+		{
+			return m_pImp->GetErrMsg();
+		}
 
 	private:
 		shared_ptr< StatementImpl > m_pImp;
